@@ -6,6 +6,9 @@
 <title>Ecofinity – Documenten</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- Google API -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
 <style>
 :root {
   --green:        #72c02c;
@@ -14,7 +17,6 @@
   --green-light:  #eef7e4;
   --green-mid:    #c5e8a0;
   --orange:       #f47920;
-  --orange-light: #fff0e4;
   --dark:         #181e12;
   --grey:         #5a6352;
   --grey-light:   #f5f7f3;
@@ -26,17 +28,9 @@
   --radius:       14px;
   --radius-sm:    8px;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Source Sans 3', sans-serif;
-  background: var(--grey-light);
-  color: var(--dark);
-  min-height: 100vh;
-}
+body { font-family: 'Source Sans 3', sans-serif; background: var(--grey-light); color: var(--dark); min-height: 100vh; }
 
 /* ── HEADER ── */
 header {
@@ -52,32 +46,58 @@ header {
   z-index: 100;
   box-shadow: 0 2px 16px rgba(40,80,10,.07);
 }
+.logo-wrap { display: flex; align-items: center; text-decoration: none; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.header-right .page-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem; color: var(--dark); }
+.header-right .page-sub  { font-size: .72rem; font-weight: 600; color: var(--orange); letter-spacing: .08em; text-transform: uppercase; }
 
-.logo-wrap { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
-
-/* The actual logo SVG — faithful recreation of the JPG */
-.eco-logo { display: block; }
-
-.header-right {
+/* ── GOOGLE LOGIN BANNER ── */
+.login-banner {
+  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  color: white;
+  text-align: center;
+  padding: .75rem 1rem;
+  font-size: .9rem;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1px;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-.header-right .page-name {
+.login-banner.hidden { display: none; }
+.btn-google {
+  background: white;
+  color: #1a73e8;
+  border: none;
+  border-radius: 50px;
+  padding: .45rem 1.2rem;
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
-  font-size: .9rem;
-  color: var(--dark);
-  letter-spacing: .02em;
+  font-size: .85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  transition: all .15s;
 }
-.header-right .page-sub {
-  font-size: .72rem;
-  font-weight: 600;
-  color: var(--orange);
-  letter-spacing: .08em;
-  text-transform: uppercase;
+.btn-google:hover { background: #e8f0fe; }
+
+.user-bar {
+  background: var(--green-light);
+  border-bottom: 1px solid var(--green-mid);
+  padding: .5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem;
 }
+.user-bar.hidden { display: none; }
+.user-info { display: flex; align-items: center; gap: .6rem; font-size: .85rem; }
+.user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--green); }
+.user-name { font-weight: 700; color: var(--dark); }
+.btn-signout { background: transparent; border: 1.5px solid var(--border); color: var(--grey); border-radius: 50px; padding: .3rem .85rem; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .78rem; cursor: pointer; }
+.btn-signout:hover { border-color: #c0392b; color: #c0392b; }
 
 /* ── HERO ── */
 .hero {
@@ -90,63 +110,26 @@ header {
 }
 .hero::before {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-  opacity: 1;
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E") repeat;
 }
 .hero-content { position: relative; z-index: 1; }
-.hero h1 {
-  font-family: 'Nunito', sans-serif;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 900;
-  margin-bottom: .4rem;
-  letter-spacing: -.02em;
-}
-.hero p {
-  font-size: 1rem;
-  opacity: .85;
-  max-width: 520px;
-  margin: 0 auto 1.75rem;
-  line-height: 1.6;
-}
-
-/* ── SEARCH ── */
-.search-wrap {
-  max-width: 580px;
-  margin: 0 auto;
-  position: relative;
-}
+.hero h1 { font-family: 'Nunito', sans-serif; font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 900; margin-bottom: .4rem; letter-spacing: -.02em; }
+.hero p  { font-size: 1rem; opacity: .85; max-width: 520px; margin: 0 auto 1.75rem; line-height: 1.6; }
+.search-wrap { max-width: 580px; margin: 0 auto; position: relative; }
 .search-wrap input {
-  width: 100%;
-  padding: .9rem 3.5rem .9rem 1.25rem;
-  border: none;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-family: 'Source Sans 3', sans-serif;
+  width: 100%; padding: .9rem 3.5rem .9rem 1.25rem;
+  border: none; border-radius: 50px;
+  font-size: 1rem; font-family: 'Source Sans 3', sans-serif;
   box-shadow: 0 4px 24px rgba(0,0,0,.18);
-  outline: none;
-  color: var(--dark);
+  outline: none; color: var(--dark);
 }
-.search-wrap input::placeholder { color: #aaa; }
-.search-icon {
-  position: absolute;
-  right: 1.1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  pointer-events: none;
-}
+.search-icon { position: absolute; right: 1.1rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none; }
 
-/* ── STATS STRIP ── */
+/* ── STATS ── */
 .stats-strip {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: .65rem 2rem;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: .65rem 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
 }
 .stat { display: flex; align-items: center; gap: .45rem; font-size: .85rem; color: var(--grey); }
 .stat strong { font-weight: 700; color: var(--dark); }
@@ -154,395 +137,202 @@ header {
 
 /* ── FILTERS ── */
 .filters-bar {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: .75rem 2rem;
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  flex-wrap: wrap;
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: .75rem 2rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
 }
-.filter-label {
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--grey);
-  text-transform: uppercase;
-  letter-spacing: .07em;
-  margin-right: .25rem;
-}
+.filter-label { font-size: .75rem; font-weight: 700; color: var(--grey); text-transform: uppercase; letter-spacing: .07em; margin-right: .25rem; }
 .filter-chip {
-  padding: .38rem 1rem;
-  border-radius: 50px;
-  border: 1.5px solid var(--border);
-  font-size: .82rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all .15s;
-  background: var(--white);
-  color: var(--grey);
-  font-family: 'Nunito', sans-serif;
+  padding: .38rem 1rem; border-radius: 50px; border: 1.5px solid var(--border);
+  font-size: .82rem; font-weight: 700; cursor: pointer; transition: all .15s;
+  background: var(--white); color: var(--grey); font-family: 'Nunito', sans-serif;
 }
 .filter-chip:hover { border-color: var(--green); color: var(--green-dark); }
 .filter-chip.active { background: var(--green); border-color: var(--green); color: white; }
 
 /* ── MAIN ── */
 main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.25rem;
-}
-.section-header h2 {
-  font-family: 'Nunito', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--dark);
-}
-.count-badge {
-  background: var(--green-light);
-  color: var(--green-dark);
-  padding: .22rem .8rem;
-  border-radius: 50px;
-  font-size: .8rem;
-  font-weight: 700;
-  font-family: 'Nunito', sans-serif;
-}
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.section-header h2 { font-family: 'Nunito', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--dark); }
+.count-badge { background: var(--green-light); color: var(--green-dark); padding: .22rem .8rem; border-radius: 50px; font-size: .8rem; font-weight: 700; font-family: 'Nunito', sans-serif; }
 
 /* ── GRID ── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 1.25rem;
-}
-
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.25rem; }
 .card {
-  background: var(--white);
-  border-radius: var(--radius);
-  border: 1.5px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: transform .2s, box-shadow .2s, border-color .2s;
+  background: var(--white); border-radius: var(--radius);
+  border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);
+  overflow: hidden; transition: transform .2s, box-shadow .2s, border-color .2s;
 }
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--green-mid);
-}
-
-.card-accent {
-  height: 4px;
-  background: linear-gradient(90deg, var(--green), var(--green-dark));
-}
-.card-accent.cat-hvac          { background: linear-gradient(90deg, #ff6b35, #f7931e); }
-.card-accent.cat-elektriciteit { background: linear-gradient(90deg, #f7c518, #f7931e); }
-.card-accent.cat-zonne-energie { background: linear-gradient(90deg, #ffd700, #f7c518); }
-.card-accent.cat-waterbehandeling { background: linear-gradient(90deg, #38b6ff, #1a7fc4); }
-.card-accent.cat-ventilatie    { background: linear-gradient(90deg, #72c02c, #4a8a18); }
-.card-accent.cat-handleidingen { background: linear-gradient(90deg, #f47920, #c0530a); }
-.card-accent.cat-overige       { background: linear-gradient(90deg, #9b59b6, #6c3483); }
-
-.card-top {
-  padding: 1.1rem 1.25rem .8rem;
-  display: flex;
-  align-items: flex-start;
-  gap: .9rem;
-}
-.card-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
-  flex-shrink: 0;
-  background: var(--green-light);
-}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--green-mid); }
+.card-accent { height: 4px; background: linear-gradient(90deg, var(--green), var(--green-dark)); }
+.card-accent.cat-hvac          { background: linear-gradient(90deg,#ff6b35,#f7931e); }
+.card-accent.cat-elektriciteit { background: linear-gradient(90deg,#f7c518,#f7931e); }
+.card-accent.cat-zonne-energie { background: linear-gradient(90deg,#ffd700,#f7c518); }
+.card-accent.cat-waterbehandeling { background: linear-gradient(90deg,#38b6ff,#1a7fc4); }
+.card-accent.cat-ventilatie    { background: linear-gradient(90deg,#72c02c,#4a8a18); }
+.card-accent.cat-handleidingen { background: linear-gradient(90deg,#f47920,#c0530a); }
+.card-accent.cat-overige       { background: linear-gradient(90deg,#9b59b6,#6c3483); }
+.card-top { padding: 1.1rem 1.25rem .8rem; display: flex; align-items: flex-start; gap: .9rem; }
+.card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; background: var(--green-light); }
 .card-icon.cat-hvac          { background: #fff0e8; }
 .card-icon.cat-elektriciteit { background: #fffbe0; }
 .card-icon.cat-zonne-energie { background: #fffde0; }
 .card-icon.cat-waterbehandeling { background: #e8f6ff; }
 .card-icon.cat-handleidingen { background: #fff4ec; }
 .card-icon.cat-overige       { background: #f4ecff; }
-
 .card-meta { flex: 1; min-width: 0; }
-.card-cat {
-  font-size: .7rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .09em;
-  color: var(--green-dark);
-  margin-bottom: .2rem;
-}
-.card-name {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  font-size: 1rem;
-  color: var(--dark);
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
+.card-cat  { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: var(--green-dark); margin-bottom: .2rem; }
+.card-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: var(--dark); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card-body { padding: 0 1.25rem 1.1rem; }
 .card-divider { height: 1px; background: var(--border); margin-bottom: .9rem; }
-
-.card-info {
-  font-size: .83rem;
-  color: var(--grey);
-  margin-bottom: .75rem;
-  line-height: 1.6;
-}
+.card-info { font-size: .83rem; color: var(--grey); margin-bottom: .75rem; line-height: 1.6; }
 .card-info b { color: var(--dark); font-weight: 600; }
-
-.card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .3rem;
-  margin-bottom: .9rem;
-}
-.tag {
-  font-size: .7rem;
-  font-weight: 700;
-  background: var(--green-light);
-  color: var(--green-dark);
-  padding: .15rem .55rem;
-  border-radius: 50px;
-  font-family: 'Nunito', sans-serif;
-}
-
+.card-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .9rem; }
+.tag { font-size: .7rem; font-weight: 700; background: var(--green-light); color: var(--green-dark); padding: .15rem .55rem; border-radius: 50px; font-family: 'Nunito', sans-serif; }
 .card-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
 
 /* ── BUTTONS ── */
 .btn {
-  padding: .55rem 1.1rem;
-  border: none;
-  border-radius: 50px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  font-size: .8rem;
-  cursor: pointer;
-  transition: all .15s;
-  display: inline-flex;
-  align-items: center;
-  gap: .3rem;
+  padding: .55rem 1.1rem; border: none; border-radius: 50px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .8rem;
+  cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: .3rem;
 }
-.btn-green  { background: var(--green); color: white; }
+.btn-green   { background: var(--green); color: white; }
 .btn-green:hover { background: var(--green-dark); }
+.btn-orange  { background: var(--orange); color: white; }
+.btn-orange:hover { background: #d4600a; }
 .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--grey); }
 .btn-outline:hover { border-color: var(--green); color: var(--green-dark); }
-.btn-orange { background: var(--orange); color: white; }
-.btn-orange:hover { background: #d4600a; }
-.btn-danger { background: transparent; border: 1.5px solid #fde0e0; color: #c0392b; }
+.btn-danger  { background: transparent; border: 1.5px solid #fde0e0; color: #c0392b; }
 .btn-danger:hover { background: #fde0e0; }
 
-/* ── EMPTY STATE ── */
-.empty {
-  text-align: center;
-  padding: 5rem 2rem;
-  color: var(--grey);
-}
+/* ── EMPTY ── */
+.empty { text-align: center; padding: 5rem 2rem; color: var(--grey); }
 .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-.empty h3 {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  font-size: 1.2rem;
-  margin-bottom: .4rem;
-  color: var(--dark);
-}
+.empty h3 { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.2rem; margin-bottom: .4rem; color: var(--dark); }
 
-/* ── OVERLAY + MODAL ── */
+/* ── OVERLAY / MODAL ── */
 .overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(15,25,8,.6);
-  z-index: 200;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,25,8,.6); z-index: 200;
+  align-items: center; justify-content: center; padding: 1rem;
   backdrop-filter: blur(2px);
 }
 .overlay.open { display: flex; }
-
 .modal {
-  background: var(--white);
-  border-radius: 18px;
-  width: 100%;
-  max-width: 500px;
+  background: var(--white); border-radius: 18px;
+  width: 100%; max-width: 520px;
   box-shadow: 0 30px 80px rgba(0,0,0,.3);
   overflow: hidden;
   animation: popIn .22s cubic-bezier(.34,1.56,.64,1);
+  max-height: 90vh;
+  overflow-y: auto;
 }
-.modal-lg { max-width: 560px; }
-@keyframes popIn {
-  from { transform: scale(.92) translateY(20px); opacity: 0; }
-  to   { transform: none; opacity: 1; }
-}
-
+.modal-lg { max-width: 580px; }
+@keyframes popIn { from { transform: scale(.92) translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
 .modal-header {
   background: linear-gradient(135deg, var(--green-deeper), var(--green-dark));
-  color: white;
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  color: white; padding: 1.25rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 1;
 }
-.modal-header h3 {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 900;
-  font-size: 1.05rem;
-}
+.modal-header h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.05rem; }
 .modal-close {
-  background: rgba(255,255,255,.2);
-  border: none;
-  color: white;
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .15s;
+  background: rgba(255,255,255,.2); border: none; color: white;
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+  font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: background .15s;
 }
 .modal-close:hover { background: rgba(255,255,255,.35); }
-
 .modal-body { padding: 1.5rem; }
 .modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: flex-end;
-  gap: .6rem;
-  background: var(--grey-light);
+  padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: .6rem; background: var(--grey-light);
+  position: sticky; bottom: 0;
 }
 
-/* ── QR MODAL ── */
-.qr-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.1rem;
-}
-#qr-container {
-  background: var(--green-light);
-  border-radius: 14px;
-  padding: 1.25rem;
-  border: 2px solid var(--green-mid);
-}
+/* ── QR ── */
+.qr-center { display: flex; flex-direction: column; align-items: center; gap: 1.1rem; }
+#qr-container { background: var(--green-light); border-radius: 14px; padding: 1.25rem; border: 2px solid var(--green-mid); }
 #qr-container canvas, #qr-container img { display: block; }
-.qr-machine-name {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  color: var(--dark);
-  font-size: 1.05rem;
-  text-align: center;
-}
-.qr-url {
-  font-size: .75rem;
-  color: var(--grey);
-  text-align: center;
-  word-break: break-all;
-  max-width: 320px;
-  background: var(--grey-light);
-  padding: .5rem .75rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
+.qr-machine-name { font-family: 'Nunito', sans-serif; font-weight: 800; color: var(--dark); font-size: 1.05rem; text-align: center; }
+.qr-url { font-size: .75rem; color: var(--grey); text-align: center; word-break: break-all; max-width: 320px; background: var(--grey-light); padding: .5rem .75rem; border-radius: 8px; border: 1px solid var(--border); }
 .qr-actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
 
 /* ── FORM ── */
 .form-group { margin-bottom: 1rem; }
-.form-group label {
-  display: block;
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--grey);
-  margin-bottom: .35rem;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  font-family: 'Nunito', sans-serif;
+.form-group label { display: block; font-size: .75rem; font-weight: 700; color: var(--grey); margin-bottom: .35rem; text-transform: uppercase; letter-spacing: .06em; font-family: 'Nunito', sans-serif; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: .65rem 1rem; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'Source Sans 3', sans-serif;
+  font-size: .92rem; color: var(--dark); background: var(--white); transition: border-color .15s, box-shadow .15s;
 }
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: .65rem 1rem;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: .92rem;
-  color: var(--dark);
-  background: var(--white);
-  transition: border-color .15s, box-shadow .15s;
-}
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(114,192,44,.12);
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(114,192,44,.12);
 }
 .form-group textarea { resize: vertical; min-height: 72px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
 .form-hint { font-size: .75rem; color: var(--grey); margin-top: .3rem; }
 
+/* ── UPLOAD ZONE ── */
+.upload-zone {
+  border: 2px dashed var(--green-mid);
+  border-radius: var(--radius-sm);
+  background: var(--green-light);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.dragover { border-color: var(--green); background: #d8f0bc; }
+.upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-icon { font-size: 2rem; margin-bottom: .5rem; }
+.upload-text { font-size: .88rem; color: var(--grey); font-weight: 600; }
+.upload-text strong { color: var(--green-dark); }
+.upload-progress {
+  margin-top: 1rem; background: var(--border); border-radius: 50px; height: 8px; overflow: hidden; display: none;
+}
+.upload-progress-bar { height: 100%; background: var(--green); border-radius: 50px; width: 0; transition: width .3s; }
+.upload-status { font-size: .82rem; color: var(--grey); margin-top: .5rem; text-align: center; }
+.upload-filename { font-size: .82rem; color: var(--green-dark); font-weight: 700; margin-top: .4rem; }
+
+/* ── DRIVE LINK RESULT ── */
+.drive-result {
+  background: var(--green-light); border: 1.5px solid var(--green-mid);
+  border-radius: var(--radius-sm); padding: .75rem 1rem;
+  font-size: .83rem; color: var(--green-dark);
+  display: none; align-items: center; gap: .5rem; margin-top: .75rem;
+}
+.drive-result.show { display: flex; }
+
 /* ── FAB ── */
 .fab {
-  position: fixed;
-  bottom: 2rem; right: 2rem;
-  background: var(--green);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: .9rem 1.5rem;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  font-size: .9rem;
-  cursor: pointer;
-  box-shadow: 0 6px 24px rgba(60,120,20,.4);
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  transition: all .2s;
-  z-index: 50;
+  position: fixed; bottom: 2rem; right: 2rem;
+  background: var(--green); color: white; border: none;
+  border-radius: 50px; padding: .9rem 1.5rem;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem;
+  cursor: pointer; box-shadow: 0 6px 24px rgba(60,120,20,.4);
+  display: flex; align-items: center; gap: .5rem; transition: all .2s; z-index: 50;
 }
-.fab:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(60,120,20,.5); }
-
-/* ── FOOTER ── */
-footer {
-  text-align: center;
-  padding: 1.75rem;
-  font-size: .82rem;
-  color: var(--grey);
-  border-top: 1px solid var(--border);
-  background: var(--white);
-  margin-top: 2rem;
-}
-footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
-footer a:hover { color: var(--green); }
-.footer-logo { margin-bottom: .6rem; }
+.fab:hover { background: var(--green-dark); transform: translateY(-2px); }
+.fab.needs-login { background: #1a73e8; box-shadow: 0 6px 24px rgba(26,115,232,.4); }
 
 /* ── TOAST ── */
 .toast {
-  position: fixed;
-  bottom: 5.5rem; right: 2rem;
-  background: var(--dark);
-  color: white;
-  padding: .7rem 1.2rem;
-  border-radius: 50px;
-  font-size: .85rem;
-  font-weight: 600;
-  font-family: 'Nunito', sans-serif;
-  box-shadow: var(--shadow-lg);
-  z-index: 300;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all .3s;
-  pointer-events: none;
+  position: fixed; bottom: 5.5rem; right: 2rem;
+  background: var(--dark); color: white;
+  padding: .7rem 1.2rem; border-radius: 50px;
+  font-size: .85rem; font-weight: 600; font-family: 'Nunito', sans-serif;
+  box-shadow: var(--shadow-lg); z-index: 300;
+  opacity: 0; transform: translateY(10px); transition: all .3s; pointer-events: none;
 }
 .toast.show { opacity: 1; transform: none; }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center; padding: 1.75rem; font-size: .82rem; color: var(--grey);
+  border-top: 1px solid var(--border); background: var(--white); margin-top: 2rem;
+}
+footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
@@ -560,22 +350,15 @@ footer a:hover { color: var(--green); }
 <!-- ═══ HEADER ═══ -->
 <header>
   <a class="logo-wrap" href="#">
-    <!-- Faithful Ecofinity logo SVG recreation -->
-    <svg class="eco-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 80" style="height:52px;width:auto">
-      <!-- Left leaf -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 80" style="height:52px;width:auto">
       <path d="M141 4 C122-1 100 16 108 40 C116 22 130 10 141 4Z" fill="#72c02c"/>
       <path d="M141 4 C134 20 125 34 114 45 C124 40 140 27 141 4Z" fill="#52a010"/>
-      <!-- Right leaf -->
       <path d="M153 4 C172-1 194 16 186 40 C178 22 164 10 153 4Z" fill="#72c02c"/>
       <path d="M153 4 C160 20 169 34 180 45 C170 40 154 27 153 4Z" fill="#52a010"/>
-      <!-- Stem -->
       <path d="M147 43 C147 52 147 58 147 63" stroke="#72c02c" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-      <!-- eco (green, rounded weight) -->
-      <text x="2" y="76" font-family="'Nunito','Arial Rounded MT Bold',Arial,sans-serif" font-size="30" font-weight="900" fill="#72c02c" letter-spacing="-0.5">eco</text>
-      <!-- finity (black) -->
-      <text x="66" y="76" font-family="'Nunito','Arial Rounded MT Bold',Arial,sans-serif" font-size="30" font-weight="900" fill="#141414" letter-spacing="-0.5">finity</text>
-      <!-- tagline orange -->
-      <text x="3" y="87" font-family="'Source Sans 3',Arial,sans-serif" font-size="8.2" font-weight="700" fill="#f47920" letter-spacing="2.2">ENERGY &amp; BUILDING SOLUTIONS</text>
+      <text x="2"  y="76" font-family="'Nunito',Arial,sans-serif" font-size="30" font-weight="900" fill="#72c02c" letter-spacing="-0.5">eco</text>
+      <text x="66" y="76" font-family="'Nunito',Arial,sans-serif" font-size="30" font-weight="900" fill="#141414" letter-spacing="-0.5">finity</text>
+      <text x="3"  y="87" font-family="'Source Sans 3',Arial,sans-serif" font-size="8.2" font-weight="700" fill="#f47920" letter-spacing="2.2">ENERGY &amp; BUILDING SOLUTIONS</text>
     </svg>
   </a>
   <div class="header-right">
@@ -583,6 +366,25 @@ footer a:hover { color: var(--green); }
     <span class="page-sub">Portaal</span>
   </div>
 </header>
+
+<!-- ═══ LOGIN BANNER ═══ -->
+<div class="login-banner" id="loginBanner">
+  <span>🔐 Meld aan met Google om bestanden te uploaden naar Drive</span>
+  <button class="btn-google" onclick="signIn()">
+    <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.7 2.5 30.2 0 24 0 14.6 0 6.6 5.5 2.7 13.5l7.8 6C12.4 13.2 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4 7.1-10 7.1-17z"/><path fill="#FBBC05" d="M10.5 28.5c-.5-1.5-.8-3-.8-4.5s.3-3 .8-4.5l-7.8-6C1 16.5 0 20.1 0 24s1 7.5 2.7 10.5l7.8-6z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.6 2.2-7.7 2.2-6.2 0-11.5-4.2-13.4-9.9l-7.8 6C6.6 42.5 14.6 48 24 48z"/></svg>
+    Aanmelden met Google
+  </button>
+</div>
+
+<!-- ═══ USER BAR ═══ -->
+<div class="user-bar hidden" id="userBar">
+  <div class="user-info">
+    <img class="user-avatar" id="userAvatar" src="" alt="">
+    <span>Aangemeld als <strong class="user-name" id="userName"></strong></span>
+    <span style="color:var(--green);font-size:.8rem">✅ Uploaden naar Drive actief</span>
+  </div>
+  <button class="btn-signout" onclick="signOut()">Afmelden</button>
+</div>
 
 <!-- ═══ HERO ═══ -->
 <div class="hero">
@@ -630,14 +432,11 @@ footer a:hover { color: var(--green); }
 </main>
 
 <!-- ═══ FAB ═══ -->
-<button class="fab" onclick="openAddModal()">＋ Document toevoegen</button>
+<button class="fab" id="fabBtn" onclick="onFabClick()">＋ Document toevoegen</button>
 
 <!-- ═══ FOOTER ═══ -->
 <footer>
-  <div class="footer-logo">
-    <a href="https://www.ecofinity.eu" target="_blank">www.ecofinity.eu</a>
-  </div>
-  © 2025 Ecofinity &nbsp;·&nbsp;
+  © 2025 <a href="https://www.ecofinity.eu" target="_blank">Ecofinity</a> &nbsp;·&nbsp;
   <a href="tel:+3255495865">055 49 58 65</a> &nbsp;·&nbsp;
   <a href="mailto:info@ecofinity.eu">info@ecofinity.eu</a>
 </footer>
@@ -646,7 +445,7 @@ footer a:hover { color: var(--green); }
 <div class="toast" id="toast"></div>
 
 <!-- ═══ QR MODAL ═══ -->
-<div class="overlay" id="qrOverlay" onclick="closeOverlay('qrOverlay', event)">
+<div class="overlay" id="qrOverlay" onclick="closeOverlay('qrOverlay',event)">
   <div class="modal">
     <div class="modal-header">
       <h3>📱 QR-code document</h3>
@@ -667,13 +466,34 @@ footer a:hover { color: var(--green); }
 </div>
 
 <!-- ═══ ADD/EDIT MODAL ═══ -->
-<div class="overlay" id="addOverlay" onclick="closeOverlay('addOverlay', event)">
+<div class="overlay" id="addOverlay" onclick="closeOverlay('addOverlay',event)">
   <div class="modal modal-lg">
     <div class="modal-header">
       <h3 id="modalTitle">➕ Document toevoegen</h3>
       <button class="modal-close" onclick="closeOverlay('addOverlay')">✕</button>
     </div>
     <div class="modal-body">
+
+      <!-- UPLOAD ZONE (alleen als ingelogd) -->
+      <div id="uploadSection">
+        <div class="form-group">
+          <label>📁 Bestand uploaden naar Google Drive</label>
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" onchange="onFileSelected(event)">
+            <div class="upload-icon">📄</div>
+            <div class="upload-text"><strong>Klik of sleep een bestand</strong> om te uploaden<br><span style="font-size:.78rem">PDF, Word, Excel, afbeelding</span></div>
+            <div class="upload-filename" id="uploadFilename"></div>
+          </div>
+          <div class="upload-progress" id="uploadProgress"><div class="upload-progress-bar" id="uploadBar"></div></div>
+          <div class="upload-status" id="uploadStatus"></div>
+          <div class="drive-result" id="driveResult">
+            <span>✅</span>
+            <span>Bestand opgeslagen in Drive — link automatisch ingevuld</span>
+          </div>
+        </div>
+        <div style="text-align:center;color:var(--grey);font-size:.82rem;margin:-0.25rem 0 1rem">— of vul een bestaande link in —</div>
+      </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Naam document *</label>
@@ -704,9 +524,9 @@ footer a:hover { color: var(--green); }
         </div>
       </div>
       <div class="form-group">
-        <label>Link document (Google Drive / Dropbox / OneDrive) *</label>
+        <label>Link document *</label>
         <input type="url" id="fUrl" placeholder="https://drive.google.com/file/d/…">
-        <div class="form-hint">Plak hier de publieke deellink van het document.</div>
+        <div class="form-hint">Wordt automatisch ingevuld na uploaden, of plak een bestaande Drive/Dropbox link.</div>
       </div>
       <div class="form-group">
         <label>Omschrijving</label>
@@ -714,7 +534,7 @@ footer a:hover { color: var(--green); }
       </div>
       <div class="form-group">
         <label>Tags (komma gescheiden)</label>
-        <input type="text" id="fTags" placeholder="bv. koeling, R32, inverter, jaarlijks onderhoud">
+        <input type="text" id="fTags" placeholder="bv. koeling, R32, inverter">
       </div>
     </div>
     <div class="modal-footer">
@@ -725,44 +545,199 @@ footer a:hover { color: var(--green); }
 </div>
 
 <script>
-// ═══ CONSTANTS ═══════════════════════════════════════════════════════
-const CAT_ICONS = {
-  'Handleidingen':    '📋',
-  'HVAC':             '🌡️',
-  'Elektriciteit':    '⚡',
-  'Zonne-energie':    '☀️',
-  'Waterbehandeling': '💧',
-  'Ventilatie':       '🌬️',
-  'Overige':          '🔧',
-};
-const CAT_SLUG = cat => cat.toLowerCase().replace(/[^a-z]/g,'');
+// ═══ CONFIG ══════════════════════════════════════════════════════════
+const CLIENT_ID   = '1041102043877-7h7c7jvubg66jpi9igk3gq9bj6i3qi8d.apps.googleusercontent.com';
+const FOLDER_ID   = '1WyiTmueVXAqYHs8aiD4avdKpYUDhp8Nd';
+const SCOPES      = 'https://www.googleapis.com/auth/drive.file';
 
-// ═══ DATA ════════════════════════════════════════════════════════════
-let docs = JSON.parse(localStorage.getItem('eco_docs') || 'null') || [
-  { id:1, name:'Warmtepomp Daikin FTXM35R', cat:'HVAC', model:'Daikin FTXM35R', location:'Serverruimte', url:'https://drive.google.com/file/d/voorbeeld1', desc:'Split-unit warmtepomp voor verwarming en koeling.', tags:['koeling','verwarming','inverter'] },
-  { id:2, name:'Omvormer SolarEdge SE5000H', cat:'Zonne-energie', model:'SolarEdge SE5000H', location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld2', desc:'Enkelfasige omvormer voor zonnepanelen installatie.', tags:['omvormer','PV','grid-tie'] },
-  { id:3, name:'Ventilatieunit Zehnder ComfoAir Q350', cat:'Ventilatie', model:'Zehnder Q350', location:'Zolderruimte', url:'https://drive.google.com/file/d/voorbeeld3', desc:'WTW-ventilatieunit met warmteterugwinning.', tags:['WTW','D+/D-','filters'] },
-  { id:4, name:'Laadpaal Alfen Eve Pro S', cat:'Elektriciteit', model:'Alfen Eve Pro S', location:'Parking', url:'https://drive.google.com/file/d/voorbeeld4', desc:'Slimme laadpaal voor elektrische voertuigen, 22kW.', tags:['EV','22kW','smart charging'] },
-  { id:5, name:'Warmtepompboiler Vaillant uniSTOR', cat:'HVAC', model:'Vaillant uniSTOR VIH R 150', location:'Stookruimte', url:'https://drive.google.com/file/d/voorbeeld5', desc:'Boiler voor sanitair warm water via warmtepomp.', tags:['SWW','R290','boiler'] },
-  { id:6, name:'Waterontharder BWT AQA perla L', cat:'Waterbehandeling', model:'BWT AQA perla L', location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld6', desc:'Automatische waterontharder met ionenwisseling.', tags:['kalk','ontharder','zout'] },
-  { id:7, name:'Installatiehandleiding Algemeen', cat:'Handleidingen', model:'', location:'Alle locaties', url:'https://drive.google.com/file/d/voorbeeld7', desc:'Algemene installatiehandleiding voor technici.', tags:['installatie','algemeen','procedures'] },
-];
-
+// ═══ STATE ═══════════════════════════════════════════════════════════
+let accessToken  = null;
+let currentUser  = null;
 let activeFilter = '';
 let currentQrUrl = '';
 let editingId    = null;
 
-// ═══ PERSIST ═════════════════════════════════════════════════════════
+const CAT_ICONS = {
+  'Handleidingen':'📋','HVAC':'🌡️','Elektriciteit':'⚡',
+  'Zonne-energie':'☀️','Waterbehandeling':'💧','Ventilatie':'🌬️','Overige':'🔧'
+};
+const catSlug = c => c.toLowerCase().replace(/[^a-z]/g,'');
+
+// ═══ DATA ════════════════════════════════════════════════════════════
+let docs = JSON.parse(localStorage.getItem('eco_docs') || 'null') || [
+  { id:1, name:'Warmtepomp Daikin FTXM35R',         cat:'HVAC',             model:'Daikin FTXM35R',        location:'Serverruimte',     url:'https://drive.google.com/file/d/voorbeeld1', desc:'Split-unit warmtepomp voor verwarming en koeling.',        tags:['koeling','verwarming','inverter'] },
+  { id:2, name:'Omvormer SolarEdge SE5000H',         cat:'Zonne-energie',    model:'SolarEdge SE5000H',     location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld2', desc:'Enkelfasige omvormer voor zonnepanelen installatie.',      tags:['omvormer','PV','grid-tie'] },
+  { id:3, name:'Ventilatieunit Zehnder Q350',         cat:'Ventilatie',       model:'Zehnder Q350',          location:'Zolderruimte',     url:'https://drive.google.com/file/d/voorbeeld3', desc:'WTW-ventilatieunit met warmteterugwinning.',               tags:['WTW','D+/D-','filters'] },
+  { id:4, name:'Laadpaal Alfen Eve Pro S',            cat:'Elektriciteit',    model:'Alfen Eve Pro S',       location:'Parking',          url:'https://drive.google.com/file/d/voorbeeld4', desc:'Slimme laadpaal voor elektrische voertuigen, 22kW.',       tags:['EV','22kW','smart charging'] },
+  { id:5, name:'Warmtepompboiler Vaillant uniSTOR',   cat:'HVAC',             model:'Vaillant uniSTOR',      location:'Stookruimte',      url:'https://drive.google.com/file/d/voorbeeld5', desc:'Boiler voor sanitair warm water via warmtepomp.',          tags:['SWW','R290','boiler'] },
+  { id:6, name:'Waterontharder BWT AQA perla L',      cat:'Waterbehandeling', model:'BWT AQA perla L',       location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld6', desc:'Automatische waterontharder met ionenwisseling.',          tags:['kalk','ontharder','zout'] },
+  { id:7, name:'Installatiehandleiding Algemeen',     cat:'Handleidingen',    model:'',                      location:'Alle locaties',    url:'https://drive.google.com/file/d/voorbeeld7', desc:'Algemene installatiehandleiding voor technici.',           tags:['installatie','algemeen','procedures'] },
+];
 function persist() { localStorage.setItem('eco_docs', JSON.stringify(docs)); }
 
-// ═══ FILTER / RENDER ═════════════════════════════════════════════════
+// ═══ GOOGLE AUTH ══════════════════════════════════════════════════════
+let tokenClient;
+window.addEventListener('load', () => {
+  // Wait for GSI to load
+  const interval = setInterval(() => {
+    if (window.google && window.google.accounts) {
+      clearInterval(interval);
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: (resp) => {
+          if (resp.error) { showToast('❌ Aanmelden mislukt: ' + resp.error); return; }
+          accessToken = resp.access_token;
+          fetchUserInfo();
+        }
+      });
+    }
+  }, 200);
+});
+
+function signIn() {
+  if (!tokenClient) { showToast('⏳ Google API nog aan het laden, probeer opnieuw...'); return; }
+  tokenClient.requestAccessToken();
+}
+
+function signOut() {
+  if (accessToken) google.accounts.oauth2.revoke(accessToken);
+  accessToken  = null;
+  currentUser  = null;
+  document.getElementById('loginBanner').classList.remove('hidden');
+  document.getElementById('userBar').classList.add('hidden');
+  document.getElementById('fabBtn').classList.remove('needs-login');
+  showToast('👋 Afgemeld.');
+}
+
+function fetchUserInfo() {
+  fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
+  .then(r => r.json())
+  .then(u => {
+    currentUser = u;
+    document.getElementById('userName').textContent   = u.name;
+    document.getElementById('userAvatar').src         = u.picture || '';
+    document.getElementById('loginBanner').classList.add('hidden');
+    document.getElementById('userBar').classList.remove('hidden');
+    document.getElementById('fabBtn').classList.remove('needs-login');
+    showToast(`✅ Aangemeld als ${u.name}`);
+  });
+}
+
+function onFabClick() {
+  if (!accessToken) {
+    showToast('🔐 Meld eerst aan met Google om documenten toe te voegen.');
+    signIn();
+    return;
+  }
+  openAddModal();
+}
+
+// ═══ UPLOAD TO DRIVE ══════════════════════════════════════════════════
+let selectedFile = null;
+
+function onFileSelected(e) {
+  selectedFile = e.target.files[0];
+  if (!selectedFile) return;
+  document.getElementById('uploadFilename').textContent = '📄 ' + selectedFile.name;
+  // Auto-fill name if empty
+  if (!document.getElementById('fName').value) {
+    document.getElementById('fName').value = selectedFile.name.replace(/\.[^.]+$/, '');
+  }
+  uploadToDrive();
+}
+
+async function uploadToDrive() {
+  if (!selectedFile || !accessToken) return;
+
+  const progress  = document.getElementById('uploadProgress');
+  const bar       = document.getElementById('uploadBar');
+  const status    = document.getElementById('uploadStatus');
+  const result    = document.getElementById('driveResult');
+
+  progress.style.display = 'block';
+  bar.style.width = '10%';
+  status.textContent = '⬆️ Bestand uploaden naar Google Drive…';
+  result.classList.remove('show');
+
+  try {
+    // Step 1: create file metadata
+    const meta = JSON.stringify({ name: selectedFile.name, parents: [FOLDER_ID] });
+    bar.style.width = '30%';
+
+    // Step 2: multipart upload
+    const boundary = '-------ecofinity_upload_boundary';
+    const delimiter = `\r\n--${boundary}\r\n`;
+    const closeDelim = `\r\n--${boundary}--`;
+
+    const metaPart = `Content-Type: application/json\r\n\r\n${meta}`;
+    const fileData = await selectedFile.arrayBuffer();
+
+    const body = new Blob([
+      `--${boundary}\r\n`,
+      metaPart,
+      delimiter,
+      `Content-Type: ${selectedFile.type || 'application/octet-stream'}\r\n\r\n`,
+      fileData,
+      closeDelim
+    ]);
+
+    bar.style.width = '60%';
+
+    const uploadResp = await fetch(
+      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': `multipart/related; boundary=${boundary}`
+        },
+        body
+      }
+    );
+
+    bar.style.width = '80%';
+    const fileObj = await uploadResp.json();
+
+    if (!fileObj.id) throw new Error(JSON.stringify(fileObj));
+
+    // Step 3: make file publicly viewable
+    await fetch(`https://www.googleapis.com/drive/v3/files/${fileObj.id}/permissions`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ role: 'reader', type: 'anyone' })
+    });
+
+    bar.style.width = '100%';
+    status.textContent = '✅ Bestand succesvol opgeslagen in Google Drive!';
+    result.classList.add('show');
+
+    // Auto-fill the URL field
+    const shareLink = `https://drive.google.com/file/d/${fileObj.id}/view`;
+    document.getElementById('fUrl').value = shareLink;
+    showToast('✅ Bestand geüpload naar Drive!');
+
+  } catch (err) {
+    bar.style.width = '100%';
+    bar.style.background = '#e74c3c';
+    status.textContent = '❌ Upload mislukt: ' + err.message;
+    showToast('❌ Upload mislukt, controleer je verbinding.');
+    console.error(err);
+  }
+}
+
+// ═══ FILTER / RENDER ══════════════════════════════════════════════════
 function filterDocs() {
   const q = document.getElementById('searchInput').value.toLowerCase().trim();
   const filtered = docs.filter(d => {
     const matchCat = !activeFilter || d.cat === activeFilter;
-    const searchIn = [d.name, d.model, d.location, d.cat, d.desc, ...(d.tags||[])].join(' ').toLowerCase();
-    const matchQ   = !q || searchIn.includes(q);
-    return matchCat && matchQ;
+    const txt = [d.name, d.model, d.location, d.cat, d.desc, ...(d.tags||[])].join(' ').toLowerCase();
+    return matchCat && (!q || txt.includes(q));
   });
   renderGrid(filtered);
 }
@@ -778,20 +753,16 @@ function renderGrid(list) {
   const grid  = document.getElementById('docGrid');
   const empty = document.getElementById('emptyState');
   document.getElementById('countBadge').textContent = `${list.length} resultaat${list.length !== 1 ? 'en' : ''}`;
-
-  // Stats
-  const cats = [...new Set(docs.map(d => d.cat))].length;
-  document.getElementById('statTotal').textContent = docs.length;
-  document.getElementById('statCats').textContent  = cats;
+  document.getElementById('statTotal').textContent  = docs.length;
+  document.getElementById('statCats').textContent   = [...new Set(docs.map(d=>d.cat))].length;
 
   if (!list.length) { grid.innerHTML = ''; empty.style.display = ''; return; }
   empty.style.display = 'none';
 
   grid.innerHTML = list.map(d => {
-    const slug = CAT_SLUG(d.cat);
+    const slug = catSlug(d.cat);
     const icon = CAT_ICONS[d.cat] || '📄';
-    const tagsHtml = (d.tags||[]).length
-      ? `<div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '';
+    const tags = (d.tags||[]).length ? `<div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '';
     return `
     <div class="card" id="card-${d.id}">
       <div class="card-accent cat-${slug}"></div>
@@ -807,40 +778,39 @@ function renderGrid(list) {
         <div class="card-info">
           ${d.model    ? `<b>Model:</b> ${d.model}<br>` : ''}
           ${d.location ? `<b>Locatie:</b> ${d.location}<br>` : ''}
-          ${d.desc     ? `<span style="color:var(--grey)">${d.desc}</span>` : ''}
+          ${d.desc     ? d.desc : ''}
         </div>
-        ${tagsHtml}
+        ${tags}
         <div class="card-actions">
-          <button class="btn btn-green" onclick="openDoc(${d.id})">📄 Open</button>
+          <button class="btn btn-green"   onclick="openDoc(${d.id})">📄 Open</button>
           <button class="btn btn-outline" onclick="openQR(${d.id})">📱 QR</button>
           <button class="btn btn-outline" onclick="editDoc(${d.id})">✏️</button>
-          <button class="btn btn-danger" onclick="deleteDoc(${d.id})">🗑</button>
+          <button class="btn btn-danger"  onclick="deleteDoc(${d.id})">🗑</button>
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-// ═══ OPEN DOCUMENT ═══════════════════════════════════════════════════
+// ═══ OPEN DOC ════════════════════════════════════════════════════════
 function openDoc(id) {
-  const d = docs.find(x => x.id === id);
+  const d = docs.find(x=>x.id===id);
   if (!d?.url) return showToast('⚠️ Geen documentlink beschikbaar.');
   window.open(d.url, '_blank');
 }
 
-// ═══ QR CODE ═════════════════════════════════════════════════════════
+// ═══ QR ══════════════════════════════════════════════════════════════
 function openQR(id) {
-  const d = docs.find(x => x.id === id);
+  const d = docs.find(x=>x.id===id);
   if (!d) return;
   currentQrUrl = d.url;
   document.getElementById('qrDocName').textContent = d.name;
-  document.getElementById('qrUrl').textContent = d.url;
+  document.getElementById('qrUrl').textContent     = d.url;
   const c = document.getElementById('qr-container');
   c.innerHTML = '';
   new QRCode(c, { text: d.url, width: 210, height: 210, colorDark: '#2e5c0a', colorLight: '#eef7e4', correctLevel: QRCode.CorrectLevel.H });
   document.getElementById('qrOverlay').classList.add('open');
 }
-
 function downloadQR() {
   const canvas = document.querySelector('#qr-container canvas');
   if (!canvas) return;
@@ -851,27 +821,35 @@ function downloadQR() {
   a.click();
   showToast('✅ QR-code gedownload!');
 }
-
 function copyUrl() {
   navigator.clipboard.writeText(currentQrUrl)
-    .then(() => showToast('✅ Link gekopieerd!'))
-    .catch(() => { prompt('Kopieer deze link:', currentQrUrl); });
+    .then(()=>showToast('✅ Link gekopieerd!'))
+    .catch(()=>{ prompt('Kopieer deze link:', currentQrUrl); });
 }
 
 // ═══ ADD / EDIT ═══════════════════════════════════════════════════════
 function openAddModal() {
   editingId = null;
+  selectedFile = null;
   document.getElementById('modalTitle').textContent = '➕ Document toevoegen';
   ['fName','fModel','fLocation','fUrl','fDesc','fTags'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('fCat').value = '';
+  document.getElementById('uploadFilename').textContent = '';
+  document.getElementById('uploadProgress').style.display = 'none';
+  document.getElementById('uploadStatus').textContent = '';
+  document.getElementById('uploadBar').style.width = '0';
+  document.getElementById('uploadBar').style.background = 'var(--green)';
+  document.getElementById('driveResult').classList.remove('show');
+  document.getElementById('fileInput').value = '';
   document.getElementById('addOverlay').classList.add('open');
 }
 
 function editDoc(id) {
-  const d = docs.find(x => x.id === id);
+  const d = docs.find(x=>x.id===id);
   if (!d) return;
   editingId = id;
-  document.getElementById('modalTitle').textContent = '✏️ Document bewerken';
+  selectedFile = null;
+  document.getElementById('modalTitle').textContent  = '✏️ Document bewerken';
   document.getElementById('fName').value     = d.name;
   document.getElementById('fCat').value      = d.cat;
   document.getElementById('fModel').value    = d.model    || '';
@@ -879,6 +857,11 @@ function editDoc(id) {
   document.getElementById('fUrl').value      = d.url;
   document.getElementById('fDesc').value     = d.desc     || '';
   document.getElementById('fTags').value     = (d.tags||[]).join(', ');
+  document.getElementById('uploadProgress').style.display = 'none';
+  document.getElementById('uploadStatus').textContent = '';
+  document.getElementById('driveResult').classList.remove('show');
+  document.getElementById('uploadFilename').textContent = '';
+  document.getElementById('fileInput').value = '';
   document.getElementById('addOverlay').classList.add('open');
 }
 
@@ -886,10 +869,7 @@ function saveDoc() {
   const name = document.getElementById('fName').value.trim();
   const cat  = document.getElementById('fCat').value;
   const url  = document.getElementById('fUrl').value.trim();
-  if (!name || !cat || !url) {
-    showToast('⚠️ Vul naam, categorie en link in.');
-    return;
-  }
+  if (!name || !cat || !url) { showToast('⚠️ Vul naam, categorie en link in.'); return; }
   const data = {
     name, cat,
     model:    document.getElementById('fModel').value.trim(),
@@ -899,7 +879,7 @@ function saveDoc() {
     tags:     document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean),
   };
   if (editingId) {
-    const i = docs.findIndex(x => x.id === editingId);
+    const i = docs.findIndex(x=>x.id===editingId);
     docs[i] = { ...docs[i], ...data };
     showToast('✅ Document bijgewerkt!');
   } else {
@@ -913,27 +893,45 @@ function saveDoc() {
 }
 
 function deleteDoc(id) {
-  if (!confirm('Document verwijderen?')) return;
-  docs = docs.filter(x => x.id !== id);
+  if (!confirm('Document verwijderen uit de lijst?')) return;
+  docs = docs.filter(x=>x.id!==id);
   persist();
   filterDocs();
   showToast('🗑 Document verwijderd.');
 }
 
-// ═══ OVERLAY ═════════════════════════════════════════════════════════
+// ═══ OVERLAY ══════════════════════════════════════════════════════════
 function closeOverlay(id, e) {
   if (!e || e.target === document.getElementById(id))
     document.getElementById(id).classList.remove('open');
 }
 
-// ═══ TOAST ═══════════════════════════════════════════════════════════
+// ═══ TOAST ════════════════════════════════════════════════════════════
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ═══ DRAG & DROP ══════════════════════════════════════════════════════
+const zone = document.getElementById('uploadZone');
+if (zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      selectedFile = file;
+      document.getElementById('uploadFilename').textContent = '📄 ' + file.name;
+      if (!document.getElementById('fName').value) document.getElementById('fName').value = file.name.replace(/\.[^.]+$/,'');
+      uploadToDrive();
+    }
+  });
 }
 
 // ═══ INIT ═════════════════════════════════════════════════════════════
