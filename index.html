@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecofinity – Documenten</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --green:        #72c02c;
+  --green-dark:   #4a8a18;
+  --green-deeper: #2e5c0a;
+  --green-light:  #eef7e4;
+  --green-mid:    #c5e8a0;
+  --orange:       #f47920;
+  --orange-light: #fff0e4;
+  --dark:         #181e12;
+  --grey:         #5a6352;
+  --grey-light:   #f5f7f3;
+  --white:        #ffffff;
+  --border:       #dde8d0;
+  --shadow-sm:    0 1px 4px rgba(40,80,10,.08);
+  --shadow:       0 4px 20px rgba(40,80,10,.10);
+  --shadow-lg:    0 12px 40px rgba(40,80,10,.16);
+  --radius:       14px;
+  --radius-sm:    8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--grey-light);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(40,80,10,.07);
+}
+
+.logo-wrap { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+
+/* The actual logo SVG — faithful recreation of the JPG */
+.eco-logo { display: block; }
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+.header-right .page-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .9rem;
+  color: var(--dark);
+  letter-spacing: .02em;
+}
+.header-right .page-sub {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--orange);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(140deg, var(--green-deeper) 0%, var(--green-dark) 50%, #5aaa1a 100%);
+  color: white;
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  opacity: 1;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero h1 {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  margin-bottom: .4rem;
+  letter-spacing: -.02em;
+}
+.hero p {
+  font-size: 1rem;
+  opacity: .85;
+  max-width: 520px;
+  margin: 0 auto 1.75rem;
+  line-height: 1.6;
+}
+
+/* ── SEARCH ── */
+.search-wrap {
+  max-width: 580px;
+  margin: 0 auto;
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  padding: .9rem 3.5rem .9rem 1.25rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-family: 'Source Sans 3', sans-serif;
+  box-shadow: 0 4px 24px rgba(0,0,0,.18);
+  outline: none;
+  color: var(--dark);
+}
+.search-wrap input::placeholder { color: #aaa; }
+.search-icon {
+  position: absolute;
+  right: 1.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: .65rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.stat { display: flex; align-items: center; gap: .45rem; font-size: .85rem; color: var(--grey); }
+.stat strong { font-weight: 700; color: var(--dark); }
+.stat-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+/* ── FILTERS ── */
+.filters-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: .75rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-right: .25rem;
+}
+.filter-chip {
+  padding: .38rem 1rem;
+  border-radius: 50px;
+  border: 1.5px solid var(--border);
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--white);
+  color: var(--grey);
+  font-family: 'Nunito', sans-serif;
+}
+.filter-chip:hover { border-color: var(--green); color: var(--green-dark); }
+.filter-chip.active { background: var(--green); border-color: var(--green); color: white; }
+
+/* ── MAIN ── */
+main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.section-header h2 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--dark);
+}
+.count-badge {
+  background: var(--green-light);
+  color: var(--green-dark);
+  padding: .22rem .8rem;
+  border-radius: 50px;
+  font-size: .8rem;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* ── GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--green-mid);
+}
+
+.card-accent {
+  height: 4px;
+  background: linear-gradient(90deg, var(--green), var(--green-dark));
+}
+.card-accent.cat-hvac          { background: linear-gradient(90deg, #ff6b35, #f7931e); }
+.card-accent.cat-elektriciteit { background: linear-gradient(90deg, #f7c518, #f7931e); }
+.card-accent.cat-zonne-energie { background: linear-gradient(90deg, #ffd700, #f7c518); }
+.card-accent.cat-waterbehandeling { background: linear-gradient(90deg, #38b6ff, #1a7fc4); }
+.card-accent.cat-ventilatie    { background: linear-gradient(90deg, #72c02c, #4a8a18); }
+.card-accent.cat-handleidingen { background: linear-gradient(90deg, #f47920, #c0530a); }
+.card-accent.cat-overige       { background: linear-gradient(90deg, #9b59b6, #6c3483); }
+
+.card-top {
+  padding: 1.1rem 1.25rem .8rem;
+  display: flex;
+  align-items: flex-start;
+  gap: .9rem;
+}
+.card-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  background: var(--green-light);
+}
+.card-icon.cat-hvac          { background: #fff0e8; }
+.card-icon.cat-elektriciteit { background: #fffbe0; }
+.card-icon.cat-zonne-energie { background: #fffde0; }
+.card-icon.cat-waterbehandeling { background: #e8f6ff; }
+.card-icon.cat-handleidingen { background: #fff4ec; }
+.card-icon.cat-overige       { background: #f4ecff; }
+
+.card-meta { flex: 1; min-width: 0; }
+.card-cat {
+  font-size: .7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  color: var(--green-dark);
+  margin-bottom: .2rem;
+}
+.card-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--dark);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-body { padding: 0 1.25rem 1.1rem; }
+.card-divider { height: 1px; background: var(--border); margin-bottom: .9rem; }
+
+.card-info {
+  font-size: .83rem;
+  color: var(--grey);
+  margin-bottom: .75rem;
+  line-height: 1.6;
+}
+.card-info b { color: var(--dark); font-weight: 600; }
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-bottom: .9rem;
+}
+.tag {
+  font-size: .7rem;
+  font-weight: 700;
+  background: var(--green-light);
+  color: var(--green-dark);
+  padding: .15rem .55rem;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.card-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: .55rem 1.1rem;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+}
+.btn-green  { background: var(--green); color: white; }
+.btn-green:hover { background: var(--green-dark); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--grey); }
+.btn-outline:hover { border-color: var(--green); color: var(--green-dark); }
+.btn-orange { background: var(--orange); color: white; }
+.btn-orange:hover { background: #d4600a; }
+.btn-danger { background: transparent; border: 1.5px solid #fde0e0; color: #c0392b; }
+.btn-danger:hover { background: #fde0e0; }
+
+/* ── EMPTY STATE ── */
+.empty {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: var(--grey);
+}
+.empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.empty h3 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin-bottom: .4rem;
+  color: var(--dark);
+}
+
+/* ── OVERLAY + MODAL ── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,25,8,.6);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.3);
+  overflow: hidden;
+  animation: popIn .22s cubic-bezier(.34,1.56,.64,1);
+}
+.modal-lg { max-width: 560px; }
+@keyframes popIn {
+  from { transform: scale(.92) translateY(20px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--green-deeper), var(--green-dark));
+  color: white;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h3 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.05rem;
+}
+.modal-close {
+  background: rgba(255,255,255,.2);
+  border: none;
+  color: white;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s;
+}
+.modal-close:hover { background: rgba(255,255,255,.35); }
+
+.modal-body { padding: 1.5rem; }
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: .6rem;
+  background: var(--grey-light);
+}
+
+/* ── QR MODAL ── */
+.qr-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+#qr-container {
+  background: var(--green-light);
+  border-radius: 14px;
+  padding: 1.25rem;
+  border: 2px solid var(--green-mid);
+}
+#qr-container canvas, #qr-container img { display: block; }
+.qr-machine-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  color: var(--dark);
+  font-size: 1.05rem;
+  text-align: center;
+}
+.qr-url {
+  font-size: .75rem;
+  color: var(--grey);
+  text-align: center;
+  word-break: break-all;
+  max-width: 320px;
+  background: var(--grey-light);
+  padding: .5rem .75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.qr-actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
+
+/* ── FORM ── */
+.form-group { margin-bottom: 1rem; }
+.form-group label {
+  display: block;
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--grey);
+  margin-bottom: .35rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-family: 'Nunito', sans-serif;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: .65rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .92rem;
+  color: var(--dark);
+  background: var(--white);
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(114,192,44,.12);
+}
+.form-group textarea { resize: vertical; min-height: 72px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.form-hint { font-size: .75rem; color: var(--grey); margin-top: .3rem; }
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: .9rem 1.5rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .9rem;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(60,120,20,.4);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  transition: all .2s;
+  z-index: 50;
+}
+.fab:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(60,120,20,.5); }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 1.75rem;
+  font-size: .82rem;
+  color: var(--grey);
+  border-top: 1px solid var(--border);
+  background: var(--white);
+  margin-top: 2rem;
+}
+footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
+footer a:hover { color: var(--green); }
+.footer-logo { margin-bottom: .6rem; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 5.5rem; right: 2rem;
+  background: var(--dark);
+  color: white;
+  padding: .7rem 1.2rem;
+  border-radius: 50px;
+  font-size: .85rem;
+  font-weight: 600;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  header { padding: 0 1rem; }
+  .hero  { padding: 2rem 1rem 1.75rem; }
+  main   { padding: 1rem; }
+  .filters-bar, .stats-strip { padding: .75rem 1rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .fab { bottom: 1rem; right: 1rem; padding: .8rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <a class="logo-wrap" href="#">
+    <!-- Faithful Ecofinity logo SVG recreation -->
+    <svg class="eco-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 80" style="height:52px;width:auto">
+      <!-- Left leaf -->
+      <path d="M141 4 C122-1 100 16 108 40 C116 22 130 10 141 4Z" fill="#72c02c"/>
+      <path d="M141 4 C134 20 125 34 114 45 C124 40 140 27 141 4Z" fill="#52a010"/>
+      <!-- Right leaf -->
+      <path d="M153 4 C172-1 194 16 186 40 C178 22 164 10 153 4Z" fill="#72c02c"/>
+      <path d="M153 4 C160 20 169 34 180 45 C170 40 154 27 153 4Z" fill="#52a010"/>
+      <!-- Stem -->
+      <path d="M147 43 C147 52 147 58 147 63" stroke="#72c02c" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <!-- eco (green, rounded weight) -->
+      <text x="2" y="76" font-family="'Nunito','Arial Rounded MT Bold',Arial,sans-serif" font-size="30" font-weight="900" fill="#72c02c" letter-spacing="-0.5">eco</text>
+      <!-- finity (black) -->
+      <text x="66" y="76" font-family="'Nunito','Arial Rounded MT Bold',Arial,sans-serif" font-size="30" font-weight="900" fill="#141414" letter-spacing="-0.5">finity</text>
+      <!-- tagline orange -->
+      <text x="3" y="87" font-family="'Source Sans 3',Arial,sans-serif" font-size="8.2" font-weight="700" fill="#f47920" letter-spacing="2.2">ENERGY &amp; BUILDING SOLUTIONS</text>
+    </svg>
+  </a>
+  <div class="header-right">
+    <span class="page-name">📋 Documenten</span>
+    <span class="page-sub">Portaal</span>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>Documenten &amp; Handleidingen</h1>
+    <p>Scan de QR-code op de machine of zoek hieronder het document op.</p>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Zoek op naam, model, locatie of afdeling…" oninput="filterDocs()" autocomplete="off">
+      <span class="search-icon">🔍</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATS ═══ -->
+<div class="stats-strip">
+  <div class="stat"><span class="stat-dot"></span><span>Totaal: <strong id="statTotal">0</strong> documenten</span></div>
+  <div class="stat"><span class="stat-dot" style="background:var(--orange)"></span><span>Categorieën: <strong id="statCats">0</strong></span></div>
+</div>
+
+<!-- ═══ FILTERS ═══ -->
+<div class="filters-bar">
+  <span class="filter-label">Categorie:</span>
+  <button class="filter-chip active" onclick="setFilter('', this)">Alle</button>
+  <button class="filter-chip" onclick="setFilter('Handleidingen', this)">📋 Handleidingen</button>
+  <button class="filter-chip" onclick="setFilter('HVAC', this)">🌡️ HVAC</button>
+  <button class="filter-chip" onclick="setFilter('Elektriciteit', this)">⚡ Elektriciteit</button>
+  <button class="filter-chip" onclick="setFilter('Zonne-energie', this)">☀️ Zonne-energie</button>
+  <button class="filter-chip" onclick="setFilter('Waterbehandeling', this)">💧 Water</button>
+  <button class="filter-chip" onclick="setFilter('Ventilatie', this)">🌬️ Ventilatie</button>
+  <button class="filter-chip" onclick="setFilter('Overige', this)">🔧 Overige</button>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+  <div class="section-header">
+    <h2>Overzicht documenten</h2>
+    <span class="count-badge" id="countBadge">0 resultaten</span>
+  </div>
+  <div class="grid" id="docGrid"></div>
+  <div class="empty" id="emptyState" style="display:none">
+    <div class="empty-icon">🔍</div>
+    <h3>Geen documenten gevonden</h3>
+    <p>Probeer een andere zoekopdracht of categorie.</p>
+  </div>
+</main>
+
+<!-- ═══ FAB ═══ -->
+<button class="fab" onclick="openAddModal()">＋ Document toevoegen</button>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-logo">
+    <a href="https://www.ecofinity.eu" target="_blank">www.ecofinity.eu</a>
+  </div>
+  © 2025 Ecofinity &nbsp;·&nbsp;
+  <a href="tel:+3255495865">055 49 58 65</a> &nbsp;·&nbsp;
+  <a href="mailto:info@ecofinity.eu">info@ecofinity.eu</a>
+</footer>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ QR MODAL ═══ -->
+<div class="overlay" id="qrOverlay" onclick="closeOverlay('qrOverlay', event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>📱 QR-code document</h3>
+      <button class="modal-close" onclick="closeOverlay('qrOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="qr-center">
+        <div id="qr-container"></div>
+        <div class="qr-machine-name" id="qrDocName"></div>
+        <div class="qr-url" id="qrUrl"></div>
+        <div class="qr-actions">
+          <button class="btn btn-green" onclick="downloadQR()">⬇ Download QR</button>
+          <button class="btn btn-outline" onclick="copyUrl()">📋 Kopieer link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD/EDIT MODAL ═══ -->
+<div class="overlay" id="addOverlay" onclick="closeOverlay('addOverlay', event)">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="modalTitle">➕ Document toevoegen</h3>
+      <button class="modal-close" onclick="closeOverlay('addOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Naam document *</label>
+          <input type="text" id="fName" placeholder="bv. Warmtepomp Daikin FTXM35R">
+        </div>
+        <div class="form-group">
+          <label>Categorie *</label>
+          <select id="fCat">
+            <option value="">— Kies categorie —</option>
+            <option>Handleidingen</option>
+            <option>HVAC</option>
+            <option>Elektriciteit</option>
+            <option>Zonne-energie</option>
+            <option>Waterbehandeling</option>
+            <option>Ventilatie</option>
+            <option>Overige</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Merk / Model</label>
+          <input type="text" id="fModel" placeholder="bv. Daikin FTXM35R">
+        </div>
+        <div class="form-group">
+          <label>Locatie / Afdeling</label>
+          <input type="text" id="fLocation" placeholder="bv. Magazijn A">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Link document (Google Drive / Dropbox / OneDrive) *</label>
+        <input type="url" id="fUrl" placeholder="https://drive.google.com/file/d/…">
+        <div class="form-hint">Plak hier de publieke deellink van het document.</div>
+      </div>
+      <div class="form-group">
+        <label>Omschrijving</label>
+        <textarea id="fDesc" placeholder="Korte omschrijving van het document of de machine…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Tags (komma gescheiden)</label>
+        <input type="text" id="fTags" placeholder="bv. koeling, R32, inverter, jaarlijks onderhoud">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeOverlay('addOverlay')">Annuleren</button>
+      <button class="btn btn-green" onclick="saveDoc()">💾 Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ CONSTANTS ═══════════════════════════════════════════════════════
+const CAT_ICONS = {
+  'Handleidingen':    '📋',
+  'HVAC':             '🌡️',
+  'Elektriciteit':    '⚡',
+  'Zonne-energie':    '☀️',
+  'Waterbehandeling': '💧',
+  'Ventilatie':       '🌬️',
+  'Overige':          '🔧',
+};
+const CAT_SLUG = cat => cat.toLowerCase().replace(/[^a-z]/g,'');
+
+// ═══ DATA ════════════════════════════════════════════════════════════
+let docs = JSON.parse(localStorage.getItem('eco_docs') || 'null') || [
+  { id:1, name:'Warmtepomp Daikin FTXM35R', cat:'HVAC', model:'Daikin FTXM35R', location:'Serverruimte', url:'https://drive.google.com/file/d/voorbeeld1', desc:'Split-unit warmtepomp voor verwarming en koeling.', tags:['koeling','verwarming','inverter'] },
+  { id:2, name:'Omvormer SolarEdge SE5000H', cat:'Zonne-energie', model:'SolarEdge SE5000H', location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld2', desc:'Enkelfasige omvormer voor zonnepanelen installatie.', tags:['omvormer','PV','grid-tie'] },
+  { id:3, name:'Ventilatieunit Zehnder ComfoAir Q350', cat:'Ventilatie', model:'Zehnder Q350', location:'Zolderruimte', url:'https://drive.google.com/file/d/voorbeeld3', desc:'WTW-ventilatieunit met warmteterugwinning.', tags:['WTW','D+/D-','filters'] },
+  { id:4, name:'Laadpaal Alfen Eve Pro S', cat:'Elektriciteit', model:'Alfen Eve Pro S', location:'Parking', url:'https://drive.google.com/file/d/voorbeeld4', desc:'Slimme laadpaal voor elektrische voertuigen, 22kW.', tags:['EV','22kW','smart charging'] },
+  { id:5, name:'Warmtepompboiler Vaillant uniSTOR', cat:'HVAC', model:'Vaillant uniSTOR VIH R 150', location:'Stookruimte', url:'https://drive.google.com/file/d/voorbeeld5', desc:'Boiler voor sanitair warm water via warmtepomp.', tags:['SWW','R290','boiler'] },
+  { id:6, name:'Waterontharder BWT AQA perla L', cat:'Waterbehandeling', model:'BWT AQA perla L', location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld6', desc:'Automatische waterontharder met ionenwisseling.', tags:['kalk','ontharder','zout'] },
+  { id:7, name:'Installatiehandleiding Algemeen', cat:'Handleidingen', model:'', location:'Alle locaties', url:'https://drive.google.com/file/d/voorbeeld7', desc:'Algemene installatiehandleiding voor technici.', tags:['installatie','algemeen','procedures'] },
+];
+
+let activeFilter = '';
+let currentQrUrl = '';
+let editingId    = null;
+
+// ═══ PERSIST ═════════════════════════════════════════════════════════
+function persist() { localStorage.setItem('eco_docs', JSON.stringify(docs)); }
+
+// ═══ FILTER / RENDER ═════════════════════════════════════════════════
+function filterDocs() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const filtered = docs.filter(d => {
+    const matchCat = !activeFilter || d.cat === activeFilter;
+    const searchIn = [d.name, d.model, d.location, d.cat, d.desc, ...(d.tags||[])].join(' ').toLowerCase();
+    const matchQ   = !q || searchIn.includes(q);
+    return matchCat && matchQ;
+  });
+  renderGrid(filtered);
+}
+
+function setFilter(cat, el) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  filterDocs();
+}
+
+function renderGrid(list) {
+  const grid  = document.getElementById('docGrid');
+  const empty = document.getElementById('emptyState');
+  document.getElementById('countBadge').textContent = `${list.length} resultaat${list.length !== 1 ? 'en' : ''}`;
+
+  // Stats
+  const cats = [...new Set(docs.map(d => d.cat))].length;
+  document.getElementById('statTotal').textContent = docs.length;
+  document.getElementById('statCats').textContent  = cats;
+
+  if (!list.length) { grid.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+
+  grid.innerHTML = list.map(d => {
+    const slug = CAT_SLUG(d.cat);
+    const icon = CAT_ICONS[d.cat] || '📄';
+    const tagsHtml = (d.tags||[]).length
+      ? `<div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '';
+    return `
+    <div class="card" id="card-${d.id}">
+      <div class="card-accent cat-${slug}"></div>
+      <div class="card-top">
+        <div class="card-icon cat-${slug}">${icon}</div>
+        <div class="card-meta">
+          <div class="card-cat">${d.cat}</div>
+          <div class="card-name" title="${d.name}">${d.name}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-divider"></div>
+        <div class="card-info">
+          ${d.model    ? `<b>Model:</b> ${d.model}<br>` : ''}
+          ${d.location ? `<b>Locatie:</b> ${d.location}<br>` : ''}
+          ${d.desc     ? `<span style="color:var(--grey)">${d.desc}</span>` : ''}
+        </div>
+        ${tagsHtml}
+        <div class="card-actions">
+          <button class="btn btn-green" onclick="openDoc(${d.id})">📄 Open</button>
+          <button class="btn btn-outline" onclick="openQR(${d.id})">📱 QR</button>
+          <button class="btn btn-outline" onclick="editDoc(${d.id})">✏️</button>
+          <button class="btn btn-danger" onclick="deleteDoc(${d.id})">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ OPEN DOCUMENT ═══════════════════════════════════════════════════
+function openDoc(id) {
+  const d = docs.find(x => x.id === id);
+  if (!d?.url) return showToast('⚠️ Geen documentlink beschikbaar.');
+  window.open(d.url, '_blank');
+}
+
+// ═══ QR CODE ═════════════════════════════════════════════════════════
+function openQR(id) {
+  const d = docs.find(x => x.id === id);
+  if (!d) return;
+  currentQrUrl = d.url;
+  document.getElementById('qrDocName').textContent = d.name;
+  document.getElementById('qrUrl').textContent = d.url;
+  const c = document.getElementById('qr-container');
+  c.innerHTML = '';
+  new QRCode(c, { text: d.url, width: 210, height: 210, colorDark: '#2e5c0a', colorLight: '#eef7e4', correctLevel: QRCode.CorrectLevel.H });
+  document.getElementById('qrOverlay').classList.add('open');
+}
+
+function downloadQR() {
+  const canvas = document.querySelector('#qr-container canvas');
+  if (!canvas) return;
+  const name = document.getElementById('qrDocName').textContent.replace(/\s+/g,'-').toLowerCase().substring(0,40);
+  const a = document.createElement('a');
+  a.download = `qr-ecofinity-${name}.png`;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+  showToast('✅ QR-code gedownload!');
+}
+
+function copyUrl() {
+  navigator.clipboard.writeText(currentQrUrl)
+    .then(() => showToast('✅ Link gekopieerd!'))
+    .catch(() => { prompt('Kopieer deze link:', currentQrUrl); });
+}
+
+// ═══ ADD / EDIT ═══════════════════════════════════════════════════════
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = '➕ Document toevoegen';
+  ['fName','fModel','fLocation','fUrl','fDesc','fTags'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fCat').value = '';
+  document.getElementById('addOverlay').classList.add('open');
+}
+
+function editDoc(id) {
+  const d = docs.find(x => x.id === id);
+  if (!d) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = '✏️ Document bewerken';
+  document.getElementById('fName').value     = d.name;
+  document.getElementById('fCat').value      = d.cat;
+  document.getElementById('fModel').value    = d.model    || '';
+  document.getElementById('fLocation').value = d.location || '';
+  document.getElementById('fUrl').value      = d.url;
+  document.getElementById('fDesc').value     = d.desc     || '';
+  document.getElementById('fTags').value     = (d.tags||[]).join(', ');
+  document.getElementById('addOverlay').classList.add('open');
+}
+
+function saveDoc() {
+  const name = document.getElementById('fName').value.trim();
+  const cat  = document.getElementById('fCat').value;
+  const url  = document.getElementById('fUrl').value.trim();
+  if (!name || !cat || !url) {
+    showToast('⚠️ Vul naam, categorie en link in.');
+    return;
+  }
+  const data = {
+    name, cat,
+    model:    document.getElementById('fModel').value.trim(),
+    location: document.getElementById('fLocation').value.trim(),
+    url,
+    desc:     document.getElementById('fDesc').value.trim(),
+    tags:     document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean),
+  };
+  if (editingId) {
+    const i = docs.findIndex(x => x.id === editingId);
+    docs[i] = { ...docs[i], ...data };
+    showToast('✅ Document bijgewerkt!');
+  } else {
+    data.id = Date.now();
+    docs.push(data);
+    showToast('✅ Document toegevoegd!');
+  }
+  persist();
+  closeOverlay('addOverlay');
+  filterDocs();
+}
+
+function deleteDoc(id) {
+  if (!confirm('Document verwijderen?')) return;
+  docs = docs.filter(x => x.id !== id);
+  persist();
+  filterDocs();
+  showToast('🗑 Document verwijderd.');
+}
+
+// ═══ OVERLAY ═════════════════════════════════════════════════════════
+function closeOverlay(id, e) {
+  if (!e || e.target === document.getElementById(id))
+    document.getElementById(id).classList.remove('open');
+}
+
+// ═══ TOAST ═══════════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ═══ INIT ═════════════════════════════════════════════════════════════
+filterDocs();
+</script>
+</body>
+</html>
