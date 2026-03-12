@@ -438,7 +438,7 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
 <footer>
   © 2025 <a href="https://www.ecofinity.eu" target="_blank">Ecofinity</a> &nbsp;·&nbsp;
   <a href="tel:+3255495865">055 49 58 65</a> &nbsp;·&nbsp;
-  <a href="mailto:info@ecofinity.eu">info@ecofinity.eu</a>
+  <a href="/cdn-cgi/l/email-protection#91f8fff7fed1f4f2fef7f8fff8e5e8bff4e4"><span class="__cf_email__" data-cfemail="ddb4b3bbb29db8beb2bbb4b3b4a9a4f3b8a8">[email&#160;protected]</span></a>
 </footer>
 
 <!-- ═══ TOAST ═══ -->
@@ -544,7 +544,7 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══ CONFIG ══════════════════════════════════════════════════════════
 const CLIENT_ID   = '1041102043877-7h7c7jvubg66jpi9igk3gq9bj6i3qi8d.apps.googleusercontent.com';
 const FOLDER_ID   = '1WyiTmueVXAqYHs8aiD4avdKpYUDhp8Nd';
@@ -646,34 +646,96 @@ function onFileSelected(e) {
   if (!document.getElementById('fName').value) {
     document.getElementById('fName').value = selectedFile.name.replace(/\.[^.]+$/, '');
   }
+  // Warn if no category selected yet
+  const cat = document.getElementById('fCat').value;
+  if (!cat) {
+    showToast('⚠️ Kies eerst een categorie — het bestand wordt dan in de juiste submap geplaatst.');
+    document.getElementById('uploadStatus').textContent = '⚠️ Kies eerst een categorie hierboven, dan wordt het bestand automatisch geüpload.';
+    document.getElementById('uploadProgress').style.display = 'block';
+    document.getElementById('uploadBar').style.width = '0%';
+    // Listen for category change then auto-upload
+    document.getElementById('fCat').addEventListener('change', function onCatChange() {
+      if (document.getElementById('fCat').value && selectedFile) {
+        uploadToDrive();
+        document.getElementById('fCat').removeEventListener('change', onCatChange);
+      }
+    });
+    return;
+  }
   uploadToDrive();
+}
+
+// Cache voor submap-IDs zodat we niet telkens opnieuw zoeken
+const subfolderCache = {};
+
+async function getOrCreateSubfolder(categoryName) {
+  // Return cached ID if known
+  if (subfolderCache[categoryName]) return subfolderCache[categoryName];
+
+  // Search for existing subfolder with this name inside FOLDER_ID
+  const searchResp = await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=` +
+    encodeURIComponent(`name='${categoryName}' and mimeType='application/vnd.google-apps.folder' and '${FOLDER_ID}' in parents and trashed=false`) +
+    `&fields=files(id,name)`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  const searchData = await searchResp.json();
+
+  if (searchData.files && searchData.files.length > 0) {
+    // Folder exists — use it
+    subfolderCache[categoryName] = searchData.files[0].id;
+    return searchData.files[0].id;
+  }
+
+  // Folder doesn't exist — create it
+  const createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: categoryName,
+      mimeType: 'application/vnd.google-apps.folder',
+      parents: [FOLDER_ID]
+    })
+  });
+  const folder = await createResp.json();
+  subfolderCache[categoryName] = folder.id;
+  return folder.id;
 }
 
 async function uploadToDrive() {
   if (!selectedFile || !accessToken) return;
 
-  const progress  = document.getElementById('uploadProgress');
-  const bar       = document.getElementById('uploadBar');
-  const status    = document.getElementById('uploadStatus');
-  const result    = document.getElementById('driveResult');
+  const progress = document.getElementById('uploadProgress');
+  const bar      = document.getElementById('uploadBar');
+  const status   = document.getElementById('uploadStatus');
+  const result   = document.getElementById('driveResult');
 
   progress.style.display = 'block';
   bar.style.width = '10%';
-  status.textContent = '⬆️ Bestand uploaden naar Google Drive…';
+  bar.style.background = 'var(--green)';
+  status.textContent = '🔍 Submap controleren…';
   result.classList.remove('show');
 
   try {
-    // Step 1: create file metadata
-    const meta = JSON.stringify({ name: selectedFile.name, parents: [FOLDER_ID] });
-    bar.style.width = '30%';
+    // Step 1: get or create submap for selected category
+    const cat = document.getElementById('fCat').value || 'Overige';
+    bar.style.width = '25%';
+    status.textContent = `📁 Submap "${cat}" zoeken of aanmaken…`;
+    const targetFolderId = await getOrCreateSubfolder(cat);
 
-    // Step 2: multipart upload
-    const boundary = '-------ecofinity_upload_boundary';
+    // Step 2: multipart upload into the subfolder
+    bar.style.width = '45%';
+    status.textContent = '⬆️ Bestand uploaden naar Google Drive…';
+
+    const boundary  = '-------ecofinity_boundary';
+    const fileData  = await selectedFile.arrayBuffer();
+    const metaJson  = JSON.stringify({ name: selectedFile.name, parents: [targetFolderId] });
+    const metaPart  = `Content-Type: application/json\r\n\r\n${metaJson}`;
     const delimiter = `\r\n--${boundary}\r\n`;
     const closeDelim = `\r\n--${boundary}--`;
-
-    const metaPart = `Content-Type: application/json\r\n\r\n${meta}`;
-    const fileData = await selectedFile.arrayBuffer();
 
     const body = new Blob([
       `--${boundary}\r\n`,
@@ -684,10 +746,10 @@ async function uploadToDrive() {
       closeDelim
     ]);
 
-    bar.style.width = '60%';
+    bar.style.width = '70%';
 
     const uploadResp = await fetch(
-      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',
+      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name',
       {
         method: 'POST',
         headers: {
@@ -698,12 +760,12 @@ async function uploadToDrive() {
       }
     );
 
-    bar.style.width = '80%';
+    bar.style.width = '85%';
     const fileObj = await uploadResp.json();
-
     if (!fileObj.id) throw new Error(JSON.stringify(fileObj));
 
     // Step 3: make file publicly viewable
+    status.textContent = '🔓 Bestand publiek toegankelijk maken…';
     await fetch(`https://www.googleapis.com/drive/v3/files/${fileObj.id}/permissions`, {
       method: 'POST',
       headers: {
@@ -714,13 +776,12 @@ async function uploadToDrive() {
     });
 
     bar.style.width = '100%';
-    status.textContent = '✅ Bestand succesvol opgeslagen in Google Drive!';
+    status.textContent = `✅ Opgeslagen in 📁 Ecofinity Documenten / ${cat}`;
     result.classList.add('show');
 
-    // Auto-fill the URL field
-    const shareLink = `https://drive.google.com/file/d/${fileObj.id}/view`;
-    document.getElementById('fUrl').value = shareLink;
-    showToast('✅ Bestand geüpload naar Drive!');
+    // Auto-fill URL
+    document.getElementById('fUrl').value = `https://drive.google.com/file/d/${fileObj.id}/view`;
+    showToast(`✅ Bestand geüpload naar map "${cat}"!`);
 
   } catch (err) {
     bar.style.width = '100%';
@@ -934,8 +995,4 @@ if (zone) {
   });
 }
 
-// ═══ INIT ═════════════════════════════════════════════════════════════
-filterDocs();
-</script>
-</body>
-</html>
+// 
