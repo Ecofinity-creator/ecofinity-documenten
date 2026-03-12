@@ -381,9 +381,12 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
   <div class="user-info">
     <img class="user-avatar" id="userAvatar" src="" alt="">
     <span>Aangemeld als <strong class="user-name" id="userName"></strong></span>
-    <span style="color:var(--green);font-size:.8rem">✅ Uploaden naar Drive actief</span>
+    <span style="color:var(--green);font-size:.8rem">✅ Google Sheet actief</span>
   </div>
-  <button class="btn-signout" onclick="signOut()">Afmelden</button>
+  <div style="display:flex;gap:.5rem;align-items:center">
+    <button class="btn-signout" onclick="loadDocs()" style="border-color:var(--green-mid);color:var(--green-dark)">🔄 Herladen</button>
+    <button class="btn-signout" onclick="signOut()">Afmelden</button>
+  </div>
 </div>
 
 <!-- ═══ HERO ═══ -->
@@ -548,7 +551,9 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
 // ═══ CONFIG ══════════════════════════════════════════════════════════
 const CLIENT_ID   = '1041102043877-7h7c7jvubg66jpi9igk3gq9bj6i3qi8d.apps.googleusercontent.com';
 const FOLDER_ID   = '1WyiTmueVXAqYHs8aiD4avdKpYUDhp8Nd';
-const SCOPES      = 'https://www.googleapis.com/auth/drive.file';
+const SHEET_ID    = '15AwVlEBf_K2d9S8lSdHO1hnf_nHtsly2LDArv1oqo2s';
+const SHEET_NAME  = 'Sheet1';
+const SCOPES      = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/spreadsheets';
 
 // ═══ STATE ═══════════════════════════════════════════════════════════
 let accessToken  = null;
@@ -556,6 +561,7 @@ let currentUser  = null;
 let activeFilter = '';
 let currentQrUrl = '';
 let editingId    = null;
+let docs         = [];
 
 const CAT_ICONS = {
   'Handleidingen':'📋','HVAC':'🌡️','Elektriciteit':'⚡',
@@ -563,17 +569,118 @@ const CAT_ICONS = {
 };
 const catSlug = c => c.toLowerCase().replace(/[^a-z]/g,'');
 
-// ═══ DATA ════════════════════════════════════════════════════════════
-let docs = JSON.parse(localStorage.getItem('eco_docs') || 'null') || [
-  { id:1, name:'Warmtepomp Daikin FTXM35R',         cat:'HVAC',             model:'Daikin FTXM35R',        location:'Serverruimte',     url:'https://drive.google.com/file/d/voorbeeld1', desc:'Split-unit warmtepomp voor verwarming en koeling.',        tags:['koeling','verwarming','inverter'] },
-  { id:2, name:'Omvormer SolarEdge SE5000H',         cat:'Zonne-energie',    model:'SolarEdge SE5000H',     location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld2', desc:'Enkelfasige omvormer voor zonnepanelen installatie.',      tags:['omvormer','PV','grid-tie'] },
-  { id:3, name:'Ventilatieunit Zehnder Q350',         cat:'Ventilatie',       model:'Zehnder Q350',          location:'Zolderruimte',     url:'https://drive.google.com/file/d/voorbeeld3', desc:'WTW-ventilatieunit met warmteterugwinning.',               tags:['WTW','D+/D-','filters'] },
-  { id:4, name:'Laadpaal Alfen Eve Pro S',            cat:'Elektriciteit',    model:'Alfen Eve Pro S',       location:'Parking',          url:'https://drive.google.com/file/d/voorbeeld4', desc:'Slimme laadpaal voor elektrische voertuigen, 22kW.',       tags:['EV','22kW','smart charging'] },
-  { id:5, name:'Warmtepompboiler Vaillant uniSTOR',   cat:'HVAC',             model:'Vaillant uniSTOR',      location:'Stookruimte',      url:'https://drive.google.com/file/d/voorbeeld5', desc:'Boiler voor sanitair warm water via warmtepomp.',          tags:['SWW','R290','boiler'] },
-  { id:6, name:'Waterontharder BWT AQA perla L',      cat:'Waterbehandeling', model:'BWT AQA perla L',       location:'Technische ruimte', url:'https://drive.google.com/file/d/voorbeeld6', desc:'Automatische waterontharder met ionenwisseling.',          tags:['kalk','ontharder','zout'] },
-  { id:7, name:'Installatiehandleiding Algemeen',     cat:'Handleidingen',    model:'',                      location:'Alle locaties',    url:'https://drive.google.com/file/d/voorbeeld7', desc:'Algemene installatiehandleiding voor technici.',           tags:['installatie','algemeen','procedures'] },
-];
-function persist() { localStorage.setItem('eco_docs', JSON.stringify(docs)); }
+// ═══ SHEETS API ═══════════════════════════════════════════════════════
+
+// Read all rows from Sheet
+async function sheetRead() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}`;
+  const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+  const data = await resp.json();
+  const rows = data.values || [];
+  if (rows.length < 2) return []; // only header or empty
+  const [header, ...body] = rows;
+  return body.map(row => ({
+    id:       row[0] || '',
+    name:     row[1] || '',
+    cat:      row[2] || '',
+    model:    row[3] || '',
+    location: row[4] || '',
+    url:      row[5] || '',
+    desc:     row[6] || '',
+    tags:     row[7] ? row[7].split(',').map(t => t.trim()).filter(Boolean) : [],
+    _row:     null // filled below
+  })).map((d, i) => ({ ...d, _row: i + 2 })); // row 1 = header, data starts at row 2
+}
+
+// Append a new row
+async function sheetAppend(doc) {
+  const values = [[
+    doc.id, doc.name, doc.cat, doc.model,
+    doc.location, doc.url, doc.desc,
+    (doc.tags || []).join(', ')
+  ]];
+  await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values })
+    }
+  );
+}
+
+// Update an existing row by row number
+async function sheetUpdate(rowNum, doc) {
+  const range = `${SHEET_NAME}!A${rowNum}:H${rowNum}`;
+  const values = [[
+    doc.id, doc.name, doc.cat, doc.model,
+    doc.location, doc.url, doc.desc,
+    (doc.tags || []).join(', ')
+  ]];
+  await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?valueInputOption=RAW`,
+    {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values })
+    }
+  );
+}
+
+// Delete a row by row number (clear it and shift up via batchUpdate)
+async function sheetDelete(rowNum) {
+  await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}:batchUpdate`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requests: [{
+          deleteDimension: {
+            range: {
+              sheetId: 0,
+              dimension: 'ROWS',
+              startIndex: rowNum - 1,
+              endIndex: rowNum
+            }
+          }
+        }]
+      })
+    }
+  );
+}
+
+// Ensure header row exists
+async function ensureHeader() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:H1`;
+  const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+  const data = await resp.json();
+  if (!data.values || !data.values[0] || data.values[0][0] !== 'id') {
+    await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:H1?valueInputOption=RAW`,
+      {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ values: [['id','name','cat','model','location','url','desc','tags']] })
+      }
+    );
+  }
+}
+
+// Load all docs from Sheet into memory
+async function loadDocs() {
+  document.getElementById('countBadge').textContent = '⏳ Laden…';
+  try {
+    await ensureHeader();
+    docs = await sheetRead();
+    filterDocs();
+    showToast(`✅ ${docs.length} documenten geladen uit Google Sheet`);
+  } catch(e) {
+    console.error(e);
+    showToast('❌ Kon documenten niet laden uit Sheet.');
+    document.getElementById('countBadge').textContent = 'Fout bij laden';
+  }
+}
 
 // ═══ GOOGLE AUTH ══════════════════════════════════════════════════════
 let tokenClient;
@@ -622,7 +729,8 @@ function fetchUserInfo() {
     document.getElementById('loginBanner').classList.add('hidden');
     document.getElementById('userBar').classList.remove('hidden');
     document.getElementById('fabBtn').classList.remove('needs-login');
-    showToast(`✅ Aangemeld als ${u.name}`);
+    showToast(`✅ Aangemeld als ${u.name} — documenten laden…`);
+    loadDocs();
   });
 }
 
@@ -926,11 +1034,12 @@ function editDoc(id) {
   document.getElementById('addOverlay').classList.add('open');
 }
 
-function saveDoc() {
+async function saveDoc() {
   const name = document.getElementById('fName').value.trim();
   const cat  = document.getElementById('fCat').value;
   const url  = document.getElementById('fUrl').value.trim();
   if (!name || !cat || !url) { showToast('⚠️ Vul naam, categorie en link in.'); return; }
+
   const data = {
     name, cat,
     model:    document.getElementById('fModel').value.trim(),
@@ -939,26 +1048,46 @@ function saveDoc() {
     desc:     document.getElementById('fDesc').value.trim(),
     tags:     document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean),
   };
-  if (editingId) {
-    const i = docs.findIndex(x=>x.id===editingId);
-    docs[i] = { ...docs[i], ...data };
-    showToast('✅ Document bijgewerkt!');
-  } else {
-    data.id = Date.now();
-    docs.push(data);
-    showToast('✅ Document toegevoegd!');
+
+  // Disable save button during operation
+  const saveBtn = document.querySelector('#addOverlay .btn-green');
+  saveBtn.textContent = '⏳ Opslaan…';
+  saveBtn.disabled = true;
+
+  try {
+    if (editingId) {
+      const existing = docs.find(x => x.id === editingId);
+      data.id = editingId;
+      await sheetUpdate(existing._row, data);
+      showToast('✅ Document bijgewerkt in Google Sheet!');
+    } else {
+      data.id = Date.now().toString();
+      await sheetAppend(data);
+      showToast('✅ Document toegevoegd aan Google Sheet!');
+    }
+    closeOverlay('addOverlay');
+    await loadDocs(); // reload from sheet
+  } catch(e) {
+    showToast('❌ Opslaan mislukt: ' + e.message);
+    console.error(e);
+  } finally {
+    saveBtn.textContent = '💾 Opslaan';
+    saveBtn.disabled = false;
   }
-  persist();
-  closeOverlay('addOverlay');
-  filterDocs();
 }
 
-function deleteDoc(id) {
-  if (!confirm('Document verwijderen uit de lijst?')) return;
-  docs = docs.filter(x=>x.id!==id);
-  persist();
-  filterDocs();
-  showToast('🗑 Document verwijderd.');
+async function deleteDoc(id) {
+  if (!confirm('Document verwijderen uit de lijst én de Sheet?')) return;
+  const d = docs.find(x => x.id === id);
+  if (!d) return;
+  try {
+    await sheetDelete(d._row);
+    showToast('🗑 Document verwijderd uit Google Sheet.');
+    await loadDocs();
+  } catch(e) {
+    showToast('❌ Verwijderen mislukt: ' + e.message);
+    console.error(e);
+  }
 }
 
 // ═══ OVERLAY ══════════════════════════════════════════════════════════
@@ -995,4 +1124,15 @@ if (zone) {
   });
 }
 
-// 
+// ═══ INIT ═════════════════════════════════════════════════════════════
+// Data wordt geladen na Google aanmelding
+renderGrid([]);
+document.getElementById('statTotal').textContent  = '—';
+document.getElementById('statCats').textContent   = '—';
+document.getElementById('countBadge').textContent = 'Meld aan om documenten te laden';
+document.getElementById('emptyState').style.display = '';
+document.getElementById('emptyState').innerHTML = `
+  <div class="empty-icon">🔐</div>
+  <h3>Meld aan met Google</h3>
+  <p>Klik op "Aanmelden met Google" bovenaan om de documenten te laden.</p>
+`;
