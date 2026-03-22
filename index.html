@@ -6,8 +6,6 @@
 <title>Ecofinity – Documenten</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<!-- Google API — geen async/defer zodat ze zeker laden -->
-<script src="https://accounts.google.com/gsi/client"></script>
 <style>
 :root {
   --green:        #72c02c;
@@ -369,7 +367,7 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
 <!-- ═══ LOGIN BANNER ═══ -->
 <div class="login-banner" id="loginBanner">
   <span>🔐 Meld aan met Google om bestanden te uploaden naar Drive</span>
-  <button class="btn-google" onclick="signIn()">
+  <button class="btn-google" onclick="handleSignIn()">
     <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.7 2.5 30.2 0 24 0 14.6 0 6.6 5.5 2.7 13.5l7.8 6C12.4 13.2 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4 7.1-10 7.1-17z"/><path fill="#FBBC05" d="M10.5 28.5c-.5-1.5-.8-3-.8-4.5s.3-3 .8-4.5l-7.8-6C1 16.5 0 20.1 0 24s1 7.5 2.7 10.5l7.8-6z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.6 2.2-7.7 2.2-6.2 0-11.5-4.2-13.4-9.9l-7.8 6C6.6 42.5 14.6 48 24 48z"/></svg>
     Aanmelden met Google
   </button>
@@ -385,7 +383,6 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
   <div style="display:flex;gap:.5rem;align-items:center">
     <button class="btn-signout" onclick="loadDocs()" style="border-color:var(--green-mid);color:var(--green-dark)">🔄 Herladen</button>
     <button class="btn-signout" onclick="signOut()">Afmelden</button>
-  </div>
 </div>
 
 <!-- ═══ HERO ═══ -->
@@ -682,50 +679,53 @@ async function loadDocs() {
 }
 
 // ═══ GOOGLE AUTH ══════════════════════════════════════════════════════
-let tokenClient;
+let tokenClient = null;
 
-function initGoogleAuth() {
-  if (!window.google || !window.google.accounts) {
-    console.error('Google GSI niet geladen');
-    document.getElementById('loginBanner').innerHTML = `
-      <span>⚠️ Google API kon niet laden. Ververs de pagina en probeer opnieuw.</span>
-      <button class="btn-google" onclick="location.reload()">🔄 Ververs pagina</button>
-    `;
+// Veilige wrapper — werkt altijd, ook als GSI nog laadt
+function handleSignIn() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    showToast('⏳ Google API laadt nog, even wachten…');
+    // Probeer opnieuw na 1 seconde
+    setTimeout(handleSignIn, 1000);
     return;
   }
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID,
-    scope: SCOPES,
-    callback: (resp) => {
-      if (resp.error) {
-        showToast('❌ Aanmelden mislukt: ' + resp.error);
-        console.error('Auth error:', resp);
-        return;
-      }
-      accessToken = resp.access_token;
-      fetchUserInfo();
-    }
-  });
-  console.log('✅ Google Auth klaar');
-}
-
-// Init zodra pagina geladen is
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initGoogleAuth);
-} else {
-  initGoogleAuth();
-}
-
-function signIn() {
   if (!tokenClient) {
-    // Probeer opnieuw te initialiseren
-    initGoogleAuth();
-    if (!tokenClient) {
-      showToast('⚠️ Google API niet geladen. Ververs de pagina.');
-      return;
-    }
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: (resp) => {
+        if (resp.error) {
+          showToast('❌ Aanmelden mislukt: ' + resp.error);
+          console.error('Auth fout:', resp);
+          return;
+        }
+        accessToken = resp.access_token;
+        fetchUserInfo();
+      }
+    });
   }
   tokenClient.requestAccessToken({ prompt: 'consent' });
+}
+
+function signOut() {
+  if (accessToken && typeof google !== 'undefined') {
+    google.accounts.oauth2.revoke(accessToken);
+  }
+  accessToken  = null;
+  currentUser  = null;
+  tokenClient  = null;
+  document.getElementById('loginBanner').classList.remove('hidden');
+  document.getElementById('userBar').classList.add('hidden');
+  document.getElementById('fabBtn').classList.add('needs-login');
+  docs = [];
+  renderGrid([]);
+  document.getElementById('emptyState').style.display = '';
+  document.getElementById('emptyState').innerHTML = `
+    <div class="empty-icon">🔐</div>
+    <h3>Meld aan met Google</h3>
+    <p>Klik op "Aanmelden met Google" bovenaan om de documenten te laden.</p>
+  `;
+  showToast('👋 Afgemeld.');
 }
 
 function signOut() {
@@ -757,8 +757,8 @@ function fetchUserInfo() {
 
 function onFabClick() {
   if (!accessToken) {
-    showToast('🔐 Meld eerst aan met Google om documenten toe te voegen.');
-    signIn();
+    showToast('🔐 Meld eerst aan met Google.');
+    handleSignIn();
     return;
   }
   openAddModal();
@@ -1157,3 +1157,7 @@ document.getElementById('emptyState').innerHTML = `
   <h3>Meld aan met Google</h3>
   <p>Klik op "Aanmelden met Google" bovenaan om de documenten te laden.</p>
 `;
+<!-- Google GSI script — onderaan geladen zodat alle functies al beschikbaar zijn -->
+<script src="https://accounts.google.com/gsi/client" async></script>
+</body>
+</html>
