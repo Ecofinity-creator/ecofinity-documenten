@@ -20,27 +20,17 @@
   --white:        #ffffff;
   --border:       #dde8d0;
   --shadow-sm:    0 1px 4px rgba(40,80,10,.08);
-  --shadow:       0 4px 20px rgba(40,80,10,.10);
   --shadow-lg:    0 12px 40px rgba(40,80,10,.16);
   --radius:       14px;
   --radius-sm:    8px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
 body { font-family: 'Source Sans 3', sans-serif; background: var(--grey-light); color: var(--dark); min-height: 100vh; }
 
-/* ── HEADER ── */
 header {
-  background: var(--white);
-  border-bottom: 2px solid var(--border);
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 70px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  background: var(--white); border-bottom: 2px solid var(--border);
+  padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+  height: 70px; position: sticky; top: 0; z-index: 100;
   box-shadow: 0 2px 16px rgba(40,80,10,.07);
 }
 .logo-wrap { display: flex; align-items: center; text-decoration: none; }
@@ -48,134 +38,62 @@ header {
 .header-right .page-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem; color: var(--dark); }
 .header-right .page-sub  { font-size: .72rem; font-weight: 600; color: var(--orange); letter-spacing: .08em; text-transform: uppercase; }
 
-/* ── GOOGLE LOGIN BANNER ── */
-.login-banner {
-  background: linear-gradient(135deg, #1a73e8, #0d47a1);
-  color: white;
-  text-align: center;
-  padding: .75rem 1rem;
-  font-size: .9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+.access-banner {
+  padding: .6rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+  background: #fff8f0; border-bottom: 2px solid #f7c59f;
 }
-.login-banner.hidden { display: none; }
-.btn-google {
-  background: white;
-  color: #1a73e8;
-  border: none;
-  border-radius: 50px;
-  padding: .45rem 1.2rem;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  font-size: .85rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  transition: all .15s;
-}
-.btn-google:hover { background: #e8f0fe; }
+.access-banner.unlocked { background: var(--green-light); border-color: var(--green-mid); }
+.access-info { display: flex; align-items: center; gap: .6rem; font-size: .85rem; }
+.access-badge { color: white; border-radius: 50px; padding: .2rem .75rem; font-size: .75rem; font-weight: 800; font-family: 'Nunito', sans-serif; background: var(--orange); }
+.access-badge.unlocked { background: var(--green); }
+.access-actions { display: flex; gap: .5rem; align-items: center; }
+.access-input { padding: .35rem .75rem; border: 1.5px solid var(--border); border-radius: 50px; font-size: .85rem; width: 160px; outline: none; }
+.access-input:focus { border-color: var(--green); }
 
-.user-bar {
-  background: var(--green-light);
-  border-bottom: 1px solid var(--green-mid);
-  padding: .5rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: .5rem;
-}
-.user-bar.hidden { display: none; }
-.user-info { display: flex; align-items: center; gap: .6rem; font-size: .85rem; }
-.user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--green); }
-.user-name { font-weight: 700; color: var(--dark); }
-.btn-signout { background: transparent; border: 1.5px solid var(--border); color: var(--grey); border-radius: 50px; padding: .3rem .85rem; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .78rem; cursor: pointer; }
-.btn-signout:hover { border-color: #c0392b; color: #c0392b; }
-
-/* ── HERO ── */
 .hero {
   background: linear-gradient(140deg, var(--green-deeper) 0%, var(--green-dark) 50%, #5aaa1a 100%);
-  color: white;
-  padding: 3rem 2rem 2.5rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+  color: white; padding: 3rem 2rem 2.5rem; text-align: center; position: relative; overflow: hidden;
 }
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E") repeat;
-}
+.hero::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E") repeat; }
 .hero-content { position: relative; z-index: 1; }
-.hero h1 { font-family: 'Nunito', sans-serif; font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 900; margin-bottom: .4rem; letter-spacing: -.02em; }
+.hero h1 { font-family: 'Nunito', sans-serif; font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 900; margin-bottom: .4rem; }
 .hero p  { font-size: 1rem; opacity: .85; max-width: 520px; margin: 0 auto 1.75rem; line-height: 1.6; }
 .search-wrap { max-width: 580px; margin: 0 auto; position: relative; }
-.search-wrap input {
-  width: 100%; padding: .9rem 3.5rem .9rem 1.25rem;
-  border: none; border-radius: 50px;
-  font-size: 1rem; font-family: 'Source Sans 3', sans-serif;
-  box-shadow: 0 4px 24px rgba(0,0,0,.18);
-  outline: none; color: var(--dark);
-}
+.search-wrap input { width: 100%; padding: .9rem 3.5rem .9rem 1.25rem; border: none; border-radius: 50px; font-size: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,.18); outline: none; color: var(--dark); }
 .search-icon { position: absolute; right: 1.1rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none; }
 
-/* ── STATS ── */
-.stats-strip {
-  background: var(--white); border-bottom: 1px solid var(--border);
-  padding: .65rem 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
-}
+.stats-strip { background: var(--white); border-bottom: 1px solid var(--border); padding: .65rem 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
 .stat { display: flex; align-items: center; gap: .45rem; font-size: .85rem; color: var(--grey); }
 .stat strong { font-weight: 700; color: var(--dark); }
 .stat-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 
-/* ── FILTERS ── */
-.filters-bar {
-  background: var(--white); border-bottom: 1px solid var(--border);
-  padding: .75rem 2rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
-}
+.filters-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: .75rem 2rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 .filter-label { font-size: .75rem; font-weight: 700; color: var(--grey); text-transform: uppercase; letter-spacing: .07em; margin-right: .25rem; }
-.filter-chip {
-  padding: .38rem 1rem; border-radius: 50px; border: 1.5px solid var(--border);
-  font-size: .82rem; font-weight: 700; cursor: pointer; transition: all .15s;
-  background: var(--white); color: var(--grey); font-family: 'Nunito', sans-serif;
-}
+.filter-chip { padding: .38rem 1rem; border-radius: 50px; border: 1.5px solid var(--border); font-size: .82rem; font-weight: 700; cursor: pointer; transition: all .15s; background: var(--white); color: var(--grey); font-family: 'Nunito', sans-serif; }
 .filter-chip:hover { border-color: var(--green); color: var(--green-dark); }
 .filter-chip.active { background: var(--green); border-color: var(--green); color: white; }
 
-/* ── MAIN ── */
 main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
 .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
-.section-header h2 { font-family: 'Nunito', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--dark); }
+.section-header h2 { font-family: 'Nunito', sans-serif; font-size: 1.15rem; font-weight: 800; }
 .count-badge { background: var(--green-light); color: var(--green-dark); padding: .22rem .8rem; border-radius: 50px; font-size: .8rem; font-weight: 700; font-family: 'Nunito', sans-serif; }
 
-/* ── GRID ── */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.25rem; }
-.card {
-  background: var(--white); border-radius: var(--radius);
-  border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);
-  overflow: hidden; transition: transform .2s, box-shadow .2s, border-color .2s;
-}
+.card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; transition: transform .2s, box-shadow .2s; }
 .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--green-mid); }
 .card-accent { height: 4px; background: linear-gradient(90deg, var(--green), var(--green-dark)); }
-.card-accent.cat-hvac          { background: linear-gradient(90deg,#ff6b35,#f7931e); }
-.card-accent.cat-elektriciteit { background: linear-gradient(90deg,#f7c518,#f7931e); }
-.card-accent.cat-zonne-energie { background: linear-gradient(90deg,#ffd700,#f7c518); }
+.card-accent.cat-hvac             { background: linear-gradient(90deg,#ff6b35,#f7931e); }
+.card-accent.cat-elektriciteit    { background: linear-gradient(90deg,#f7c518,#f7931e); }
+.card-accent.cat-zonneenergie     { background: linear-gradient(90deg,#ffd700,#f7c518); }
 .card-accent.cat-waterbehandeling { background: linear-gradient(90deg,#38b6ff,#1a7fc4); }
-.card-accent.cat-ventilatie    { background: linear-gradient(90deg,#72c02c,#4a8a18); }
-.card-accent.cat-handleidingen { background: linear-gradient(90deg,#f47920,#c0530a); }
-.card-accent.cat-overige       { background: linear-gradient(90deg,#9b59b6,#6c3483); }
+.card-accent.cat-ventilatie       { background: linear-gradient(90deg,#72c02c,#4a8a18); }
+.card-accent.cat-handleidingen    { background: linear-gradient(90deg,#f47920,#c0530a); }
+.card-accent.cat-overige          { background: linear-gradient(90deg,#9b59b6,#6c3483); }
 .card-top { padding: 1.1rem 1.25rem .8rem; display: flex; align-items: flex-start; gap: .9rem; }
 .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; background: var(--green-light); }
-.card-icon.cat-hvac          { background: #fff0e8; }
-.card-icon.cat-elektriciteit { background: #fffbe0; }
-.card-icon.cat-zonne-energie { background: #fffde0; }
-.card-icon.cat-waterbehandeling { background: #e8f6ff; }
-.card-icon.cat-handleidingen { background: #fff4ec; }
-.card-icon.cat-overige       { background: #f4ecff; }
+.card-icon.cat-hvac { background:#fff0e8; } .card-icon.cat-elektriciteit { background:#fffbe0; }
+.card-icon.cat-zonneenergie { background:#fffde0; } .card-icon.cat-waterbehandeling { background:#e8f6ff; }
+.card-icon.cat-handleidingen { background:#fff4ec; } .card-icon.cat-overige { background:#f4ecff; }
 .card-meta { flex: 1; min-width: 0; }
 .card-cat  { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: var(--green-dark); margin-bottom: .2rem; }
 .card-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: var(--dark); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -187,156 +105,59 @@ main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
 .tag { font-size: .7rem; font-weight: 700; background: var(--green-light); color: var(--green-dark); padding: .15rem .55rem; border-radius: 50px; font-family: 'Nunito', sans-serif; }
 .card-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
 
-/* ── BUTTONS ── */
-.btn {
-  padding: .55rem 1.1rem; border: none; border-radius: 50px;
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .8rem;
-  cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: .3rem;
-}
-.btn-green   { background: var(--green); color: white; }
-.btn-green:hover { background: var(--green-dark); }
-.btn-orange  { background: var(--orange); color: white; }
-.btn-orange:hover { background: #d4600a; }
-.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--grey); }
-.btn-outline:hover { border-color: var(--green); color: var(--green-dark); }
-.btn-danger  { background: transparent; border: 1.5px solid #fde0e0; color: #c0392b; }
-.btn-danger:hover { background: #fde0e0; }
+.btn { padding: .55rem 1.1rem; border: none; border-radius: 50px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .8rem; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: .3rem; }
+.btn-green { background: var(--green); color: white; } .btn-green:hover { background: var(--green-dark); }
+.btn-orange { background: var(--orange); color: white; } .btn-orange:hover { background: #d4600a; }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--grey); } .btn-outline:hover { border-color: var(--green); color: var(--green-dark); }
+.btn-danger { background: transparent; border: 1.5px solid #fde0e0; color: #c0392b; } .btn-danger:hover { background: #fde0e0; }
 
-/* ── EMPTY ── */
+.loading { text-align: center; padding: 4rem 2rem; color: var(--grey); }
+.spinner { width: 40px; height: 40px; border: 3px solid var(--green-mid); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 .empty { text-align: center; padding: 5rem 2rem; color: var(--grey); }
 .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
 .empty h3 { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.2rem; margin-bottom: .4rem; color: var(--dark); }
 
-/* ── OVERLAY / MODAL ── */
-.overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(15,25,8,.6); z-index: 200;
-  align-items: center; justify-content: center; padding: 1rem;
-  backdrop-filter: blur(2px);
-}
+.overlay { display: none; position: fixed; inset: 0; background: rgba(15,25,8,.6); z-index: 200; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(2px); }
 .overlay.open { display: flex; }
-.modal {
-  background: var(--white); border-radius: 18px;
-  width: 100%; max-width: 520px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.3);
-  overflow: hidden;
-  animation: popIn .22s cubic-bezier(.34,1.56,.64,1);
-  max-height: 90vh;
-  overflow-y: auto;
-}
+.modal { background: var(--white); border-radius: 18px; width: 100%; max-width: 520px; box-shadow: 0 30px 80px rgba(0,0,0,.3); overflow: hidden; animation: popIn .22s cubic-bezier(.34,1.56,.64,1); max-height: 90vh; overflow-y: auto; }
 .modal-lg { max-width: 580px; }
 @keyframes popIn { from { transform: scale(.92) translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
-.modal-header {
-  background: linear-gradient(135deg, var(--green-deeper), var(--green-dark));
-  color: white; padding: 1.25rem 1.5rem;
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 1;
-}
+.modal-header { background: linear-gradient(135deg, var(--green-deeper), var(--green-dark)); color: white; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
 .modal-header h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.05rem; }
-.modal-close {
-  background: rgba(255,255,255,.2); border: none; color: white;
-  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-  font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: background .15s;
-}
+.modal-close { background: rgba(255,255,255,.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
 .modal-close:hover { background: rgba(255,255,255,.35); }
 .modal-body { padding: 1.5rem; }
-.modal-footer {
-  padding: 1rem 1.5rem; border-top: 1px solid var(--border);
-  display: flex; justify-content: flex-end; gap: .6rem; background: var(--grey-light);
-  position: sticky; bottom: 0;
-}
+.modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: .6rem; background: var(--grey-light); position: sticky; bottom: 0; }
 
-/* ── QR ── */
 .qr-center { display: flex; flex-direction: column; align-items: center; gap: 1.1rem; }
 #qr-container { background: var(--green-light); border-radius: 14px; padding: 1.25rem; border: 2px solid var(--green-mid); }
-#qr-container canvas, #qr-container img { display: block; }
 .qr-machine-name { font-family: 'Nunito', sans-serif; font-weight: 800; color: var(--dark); font-size: 1.05rem; text-align: center; }
 .qr-url { font-size: .75rem; color: var(--grey); text-align: center; word-break: break-all; max-width: 320px; background: var(--grey-light); padding: .5rem .75rem; border-radius: 8px; border: 1px solid var(--border); }
 .qr-actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
 
-/* ── FORM ── */
 .form-group { margin-bottom: 1rem; }
 .form-group label { display: block; font-size: .75rem; font-weight: 700; color: var(--grey); margin-bottom: .35rem; text-transform: uppercase; letter-spacing: .06em; font-family: 'Nunito', sans-serif; }
-.form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: .65rem 1rem; border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); font-family: 'Source Sans 3', sans-serif;
-  font-size: .92rem; color: var(--dark); background: var(--white); transition: border-color .15s, box-shadow .15s;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-  outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(114,192,44,.12);
-}
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: .65rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: 'Source Sans 3', sans-serif; font-size: .92rem; color: var(--dark); background: var(--white); transition: border-color .15s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(114,192,44,.12); }
 .form-group textarea { resize: vertical; min-height: 72px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
 .form-hint { font-size: .75rem; color: var(--grey); margin-top: .3rem; }
 
-/* ── UPLOAD ZONE ── */
-.upload-zone {
-  border: 2px dashed var(--green-mid);
-  border-radius: var(--radius-sm);
-  background: var(--green-light);
-  padding: 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-  position: relative;
-}
-.upload-zone:hover, .upload-zone.dragover { border-color: var(--green); background: #d8f0bc; }
-.upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-.upload-icon { font-size: 2rem; margin-bottom: .5rem; }
-.upload-text { font-size: .88rem; color: var(--grey); font-weight: 600; }
-.upload-text strong { color: var(--green-dark); }
-.upload-progress {
-  margin-top: 1rem; background: var(--border); border-radius: 50px; height: 8px; overflow: hidden; display: none;
-}
-.upload-progress-bar { height: 100%; background: var(--green); border-radius: 50px; width: 0; transition: width .3s; }
-.upload-status { font-size: .82rem; color: var(--grey); margin-top: .5rem; text-align: center; }
-.upload-filename { font-size: .82rem; color: var(--green-dark); font-weight: 700; margin-top: .4rem; }
-
-/* ── DRIVE LINK RESULT ── */
-.drive-result {
-  background: var(--green-light); border: 1.5px solid var(--green-mid);
-  border-radius: var(--radius-sm); padding: .75rem 1rem;
-  font-size: .83rem; color: var(--green-dark);
-  display: none; align-items: center; gap: .5rem; margin-top: .75rem;
-}
-.drive-result.show { display: flex; }
-
-/* ── FAB ── */
-.fab {
-  position: fixed; bottom: 2rem; right: 2rem;
-  background: var(--green); color: white; border: none;
-  border-radius: 50px; padding: .9rem 1.5rem;
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem;
-  cursor: pointer; box-shadow: 0 6px 24px rgba(60,120,20,.4);
-  display: flex; align-items: center; gap: .5rem; transition: all .2s; z-index: 50;
-}
+.fab { position: fixed; bottom: 2rem; right: 2rem; background: var(--green); color: white; border: none; border-radius: 50px; padding: .9rem 1.5rem; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .9rem; cursor: pointer; box-shadow: 0 6px 24px rgba(60,120,20,.4); display: flex; align-items: center; gap: .5rem; transition: all .2s; z-index: 50; }
 .fab:hover { background: var(--green-dark); transform: translateY(-2px); }
-.fab.needs-login { background: #1a73e8; box-shadow: 0 6px 24px rgba(26,115,232,.4); }
+.fab.locked { background: #aaa; box-shadow: none; cursor: default; }
 
-/* ── TOAST ── */
-.toast {
-  position: fixed; bottom: 5.5rem; right: 2rem;
-  background: var(--dark); color: white;
-  padding: .7rem 1.2rem; border-radius: 50px;
-  font-size: .85rem; font-weight: 600; font-family: 'Nunito', sans-serif;
-  box-shadow: var(--shadow-lg); z-index: 300;
-  opacity: 0; transform: translateY(10px); transition: all .3s; pointer-events: none;
-}
+.toast { position: fixed; bottom: 5.5rem; right: 2rem; background: var(--dark); color: white; padding: .7rem 1.2rem; border-radius: 50px; font-size: .85rem; font-weight: 600; font-family: 'Nunito', sans-serif; box-shadow: var(--shadow-lg); z-index: 300; opacity: 0; transform: translateY(10px); transition: all .3s; pointer-events: none; }
 .toast.show { opacity: 1; transform: none; }
 
-/* ── FOOTER ── */
-footer {
-  text-align: center; padding: 1.75rem; font-size: .82rem; color: var(--grey);
-  border-top: 1px solid var(--border); background: var(--white); margin-top: 2rem;
-}
+footer { text-align: center; padding: 1.75rem; font-size: .82rem; color: var(--grey); border-top: 1px solid var(--border); background: var(--white); margin-top: 2rem; }
 footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 640px) {
-  header { padding: 0 1rem; }
-  .hero  { padding: 2rem 1rem 1.75rem; }
-  main   { padding: 1rem; }
-  .filters-bar, .stats-strip { padding: .75rem 1rem; }
+  header, .access-banner, .stats-strip, .filters-bar { padding-left: 1rem; padding-right: 1rem; }
+  main { padding: 1rem; }
   .form-row { grid-template-columns: 1fr; }
   .fab { bottom: 1rem; right: 1rem; padding: .8rem 1.2rem; }
 }
@@ -344,19 +165,9 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
 </head>
 <body>
 
-<!-- ═══ HEADER ═══ -->
 <header>
   <a class="logo-wrap" href="#">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 80" style="height:52px;width:auto">
-      <path d="M141 4 C122-1 100 16 108 40 C116 22 130 10 141 4Z" fill="#72c02c"/>
-      <path d="M141 4 C134 20 125 34 114 45 C124 40 140 27 141 4Z" fill="#52a010"/>
-      <path d="M153 4 C172-1 194 16 186 40 C178 22 164 10 153 4Z" fill="#72c02c"/>
-      <path d="M153 4 C160 20 169 34 180 45 C170 40 154 27 153 4Z" fill="#52a010"/>
-      <path d="M147 43 C147 52 147 58 147 63" stroke="#72c02c" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-      <text x="2"  y="76" font-family="'Nunito',Arial,sans-serif" font-size="30" font-weight="900" fill="#72c02c" letter-spacing="-0.5">eco</text>
-      <text x="66" y="76" font-family="'Nunito',Arial,sans-serif" font-size="30" font-weight="900" fill="#141414" letter-spacing="-0.5">finity</text>
-      <text x="3"  y="87" font-family="'Source Sans 3',Arial,sans-serif" font-size="8.2" font-weight="700" fill="#f47920" letter-spacing="2.2">ENERGY &amp; BUILDING SOLUTIONS</text>
-    </svg>
+    <img src="logo.jpg" alt="Ecofinity" style="height:54px;width:auto">
   </a>
   <div class="header-right">
     <span class="page-name">📋 Documenten</span>
@@ -364,28 +175,17 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
   </div>
 </header>
 
-<!-- ═══ LOGIN BANNER ═══ -->
-<div class="login-banner" id="loginBanner">
-  <span>🔐 Meld aan met Google om bestanden te uploaden naar Drive</span>
-  <button class="btn-google" onclick="handleSignIn()">
-    <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.7 2.5 30.2 0 24 0 14.6 0 6.6 5.5 2.7 13.5l7.8 6C12.4 13.2 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4 7.1-10 7.1-17z"/><path fill="#FBBC05" d="M10.5 28.5c-.5-1.5-.8-3-.8-4.5s.3-3 .8-4.5l-7.8-6C1 16.5 0 20.1 0 24s1 7.5 2.7 10.5l7.8-6z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.6 2.2-7.7 2.2-6.2 0-11.5-4.2-13.4-9.9l-7.8 6C6.6 42.5 14.6 48 24 48z"/></svg>
-    Aanmelden met Google
-  </button>
-</div>
-
-<!-- ═══ USER BAR ═══ -->
-<div class="user-bar hidden" id="userBar">
-  <div class="user-info">
-    <img class="user-avatar" id="userAvatar" src="" alt="">
-    <span>Aangemeld als <strong class="user-name" id="userName"></strong></span>
-    <span style="color:var(--green);font-size:.8rem">✅ Google Sheet actief</span>
+<div class="access-banner" id="accessBanner">
+  <div class="access-info">
+    <span class="access-badge" id="accessBadge">🔒 Alleen lezen</span>
+    <span id="accessText">Voer de toegangscode in om documenten toe te voegen of te bewerken</span>
   </div>
-  <div style="display:flex;gap:.5rem;align-items:center">
-    <button class="btn-signout" onclick="loadDocs()" style="border-color:var(--green-mid);color:var(--green-dark)">🔄 Herladen</button>
-    <button class="btn-signout" onclick="signOut()">Afmelden</button>
+  <div class="access-actions" id="accessActions">
+    <input type="password" class="access-input" id="accessCodeInput" placeholder="Toegangscode…" onkeydown="if(event.key==='Enter')checkCode()">
+    <button class="btn btn-orange" style="padding:.4rem .9rem;font-size:.8rem" onclick="checkCode()">🔓 Ontgrendel</button>
+  </div>
 </div>
 
-<!-- ═══ HERO ═══ -->
 <div class="hero">
   <div class="hero-content">
     <h1>Documenten &amp; Handleidingen</h1>
@@ -397,32 +197,33 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
   </div>
 </div>
 
-<!-- ═══ STATS ═══ -->
 <div class="stats-strip">
-  <div class="stat"><span class="stat-dot"></span><span>Totaal: <strong id="statTotal">0</strong> documenten</span></div>
-  <div class="stat"><span class="stat-dot" style="background:var(--orange)"></span><span>Categorieën: <strong id="statCats">0</strong></span></div>
+  <div class="stat"><span class="stat-dot"></span><span>Totaal: <strong id="statTotal">—</strong> documenten</span></div>
+  <div class="stat"><span class="stat-dot" style="background:var(--orange)"></span><span>Categorieën: <strong id="statCats">—</strong></span></div>
+  <div class="stat" style="margin-left:auto">
+    <button class="btn btn-outline" style="padding:.3rem .8rem;font-size:.78rem" onclick="loadDocs()">🔄 Vernieuwen</button>
+  </div>
 </div>
 
-<!-- ═══ FILTERS ═══ -->
 <div class="filters-bar">
   <span class="filter-label">Categorie:</span>
-  <button class="filter-chip active" onclick="setFilter('', this)">Alle</button>
-  <button class="filter-chip" onclick="setFilter('Handleidingen', this)">📋 Handleidingen</button>
-  <button class="filter-chip" onclick="setFilter('HVAC', this)">🌡️ HVAC</button>
-  <button class="filter-chip" onclick="setFilter('Elektriciteit', this)">⚡ Elektriciteit</button>
-  <button class="filter-chip" onclick="setFilter('Zonne-energie', this)">☀️ Zonne-energie</button>
-  <button class="filter-chip" onclick="setFilter('Waterbehandeling', this)">💧 Water</button>
-  <button class="filter-chip" onclick="setFilter('Ventilatie', this)">🌬️ Ventilatie</button>
-  <button class="filter-chip" onclick="setFilter('Overige', this)">🔧 Overige</button>
+  <button class="filter-chip active" onclick="setFilter('',this)">Alle</button>
+  <button class="filter-chip" onclick="setFilter('Handleidingen',this)">📋 Handleidingen</button>
+  <button class="filter-chip" onclick="setFilter('HVAC',this)">🌡️ HVAC</button>
+  <button class="filter-chip" onclick="setFilter('Elektriciteit',this)">⚡ Elektriciteit</button>
+  <button class="filter-chip" onclick="setFilter('Zonne-energie',this)">☀️ Zonne-energie</button>
+  <button class="filter-chip" onclick="setFilter('Waterbehandeling',this)">💧 Water</button>
+  <button class="filter-chip" onclick="setFilter('Ventilatie',this)">🌬️ Ventilatie</button>
+  <button class="filter-chip" onclick="setFilter('Overige',this)">🔧 Overige</button>
 </div>
 
-<!-- ═══ MAIN ═══ -->
 <main>
   <div class="section-header">
     <h2>Overzicht documenten</h2>
-    <span class="count-badge" id="countBadge">0 resultaten</span>
+    <span class="count-badge" id="countBadge">laden…</span>
   </div>
-  <div class="grid" id="docGrid"></div>
+  <div id="loadingState" class="loading"><div class="spinner"></div><p>Documenten laden uit Google Sheet…</p></div>
+  <div class="grid" id="docGrid" style="display:none"></div>
   <div class="empty" id="emptyState" style="display:none">
     <div class="empty-icon">🔍</div>
     <h3>Geen documenten gevonden</h3>
@@ -430,20 +231,17 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
   </div>
 </main>
 
-<!-- ═══ FAB ═══ -->
-<button class="fab" id="fabBtn" onclick="onFabClick()">＋ Document toevoegen</button>
+<button class="fab locked" id="fabBtn" onclick="onFabClick()">＋ Document toevoegen</button>
 
-<!-- ═══ FOOTER ═══ -->
 <footer>
   © 2025 <a href="https://www.ecofinity.eu" target="_blank">Ecofinity</a> &nbsp;·&nbsp;
   <a href="tel:+3255495865">055 49 58 65</a> &nbsp;·&nbsp;
-  <a href="/cdn-cgi/l/email-protection#91f8fff7fed1f4f2fef7f8fff8e5e8bff4e4"><span class="__cf_email__" data-cfemail="ddb4b3bbb29db8beb2bbb4b3b4a9a4f3b8a8">[email&#160;protected]</span></a>
+  <a href="/cdn-cgi/l/email-protection#cea7a0a8a18eabada1a8a7a0a7bab7e0abbb"><span class="__cf_email__" data-cfemail="e68f888089a6838589808f888f929fc88393">[email&#160;protected]</span></a>
 </footer>
 
-<!-- ═══ TOAST ═══ -->
 <div class="toast" id="toast"></div>
 
-<!-- ═══ QR MODAL ═══ -->
+<!-- QR MODAL -->
 <div class="overlay" id="qrOverlay" onclick="closeOverlay('qrOverlay',event)">
   <div class="modal">
     <div class="modal-header">
@@ -464,7 +262,7 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
   </div>
 </div>
 
-<!-- ═══ ADD/EDIT MODAL ═══ -->
+<!-- ADD/EDIT MODAL -->
 <div class="overlay" id="addOverlay" onclick="closeOverlay('addOverlay',event)">
   <div class="modal modal-lg">
     <div class="modal-header">
@@ -472,586 +270,247 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
       <button class="modal-close" onclick="closeOverlay('addOverlay')">✕</button>
     </div>
     <div class="modal-body">
-
-      <!-- UPLOAD ZONE (alleen als ingelogd) -->
-      <div id="uploadSection">
-        <div class="form-group">
-          <label>📁 Bestand uploaden naar Google Drive</label>
-          <div class="upload-zone" id="uploadZone">
-            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" onchange="onFileSelected(event)">
-            <div class="upload-icon">📄</div>
-            <div class="upload-text"><strong>Klik of sleep een bestand</strong> om te uploaden<br><span style="font-size:.78rem">PDF, Word, Excel, afbeelding</span></div>
-            <div class="upload-filename" id="uploadFilename"></div>
-          </div>
-          <div class="upload-progress" id="uploadProgress"><div class="upload-progress-bar" id="uploadBar"></div></div>
-          <div class="upload-status" id="uploadStatus"></div>
-          <div class="drive-result" id="driveResult">
-            <span>✅</span>
-            <span>Bestand opgeslagen in Drive — link automatisch ingevuld</span>
-          </div>
-        </div>
-        <div style="text-align:center;color:var(--grey);font-size:.82rem;margin:-0.25rem 0 1rem">— of vul een bestaande link in —</div>
-      </div>
-
       <div class="form-row">
         <div class="form-group">
           <label>Naam document *</label>
-          <input type="text" id="fName" placeholder="bv. Warmtepomp Daikin FTXM35R">
+          <input type="text" id="fName" placeholder="bv. Warmtepomp Daikin">
         </div>
         <div class="form-group">
           <label>Categorie *</label>
           <select id="fCat">
-            <option value="">— Kies categorie —</option>
-            <option>Handleidingen</option>
-            <option>HVAC</option>
-            <option>Elektriciteit</option>
-            <option>Zonne-energie</option>
-            <option>Waterbehandeling</option>
-            <option>Ventilatie</option>
-            <option>Overige</option>
+            <option value="">— Kies —</option>
+            <option>Handleidingen</option><option>HVAC</option><option>Elektriciteit</option>
+            <option>Zonne-energie</option><option>Waterbehandeling</option><option>Ventilatie</option><option>Overige</option>
           </select>
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Merk / Model</label>
-          <input type="text" id="fModel" placeholder="bv. Daikin FTXM35R">
-        </div>
-        <div class="form-group">
-          <label>Locatie / Afdeling</label>
-          <input type="text" id="fLocation" placeholder="bv. Magazijn A">
-        </div>
+        <div class="form-group"><label>Merk / Model</label><input type="text" id="fModel" placeholder="bv. Daikin FTXM35R"></div>
+        <div class="form-group"><label>Locatie / Afdeling</label><input type="text" id="fLocation" placeholder="bv. Magazijn A"></div>
       </div>
       <div class="form-group">
         <label>Link document *</label>
         <input type="url" id="fUrl" placeholder="https://drive.google.com/file/d/…">
-        <div class="form-hint">Wordt automatisch ingevuld na uploaden, of plak een bestaande Drive/Dropbox link.</div>
+        <div class="form-hint">Plak de publieke deellink van het document in Google Drive.</div>
       </div>
-      <div class="form-group">
-        <label>Omschrijving</label>
-        <textarea id="fDesc" placeholder="Korte omschrijving van het document of de machine…"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Tags (komma gescheiden)</label>
-        <input type="text" id="fTags" placeholder="bv. koeling, R32, inverter">
-      </div>
+      <div class="form-group"><label>Omschrijving</label><textarea id="fDesc" placeholder="Korte omschrijving…"></textarea></div>
+      <div class="form-group"><label>Tags (komma gescheiden)</label><input type="text" id="fTags" placeholder="bv. koeling, R32, inverter"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeOverlay('addOverlay')">Annuleren</button>
-      <button class="btn btn-green" onclick="saveDoc()">💾 Opslaan</button>
+      <button class="btn btn-green" id="saveBtn" onclick="saveDoc()">💾 Opslaan in Sheet</button>
     </div>
   </div>
 </div>
 
-<script data-cfasync="false">
-// ═══ CONFIG ══════════════════════════════════════════════════════════
-const CLIENT_ID   = '459488927629-eiu9k7i76rb56ib51c334kdd16f50s7g.apps.googleusercontent.com';
-const FOLDER_ID   = '1WyiTmueVXAqYHs8aiD4avdKpYUDhp8Nd';
+<!-- DELETE MODAL -->
+<div class="overlay" id="deleteOverlay" onclick="closeOverlay('deleteOverlay',event)">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header" style="background:linear-gradient(135deg,#c0392b,#e74c3c)">
+      <h3>🗑 Verwijderen</h3>
+      <button class="modal-close" onclick="closeOverlay('deleteOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:.75rem">Ben je zeker dat je <strong id="deleteDocName"></strong> wil verwijderen?</p>
+      <p style="font-size:.85rem;color:var(--grey)">Het bestand in Google Drive blijft bewaard.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeOverlay('deleteOverlay')">Annuleren</button>
+      <button class="btn" style="background:#c0392b;color:white" onclick="confirmDelete()">🗑 Verwijderen</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false">
+// ══════════════════════════════════════════════════
+// CONFIGURATIE — pas deze waarden aan
+// ══════════════════════════════════════════════════
 const SHEET_ID    = '15AwVlEBf_K2d9S8lSdHO1hnf_nHtsly2LDArv1oqo2s';
-const SHEET_NAME  = 'Sheet1';
-const SCOPES      = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/spreadsheets';
+const ACCESS_CODE = 'ecofinity2025'; // ← Verander dit naar jouw eigen code!
 
-// ═══ STATE ═══════════════════════════════════════════════════════════
-let accessToken  = null;
-let currentUser  = null;
-let activeFilter = '';
-let currentQrUrl = '';
-let editingId    = null;
-let docs         = [];
+// Google Apps Script URL — stap 2 (zie instructies onderaan)
+// Laat leeg ('') als je dit nog niet hebt ingesteld
+const SCRIPT_URL  = '';
+// ══════════════════════════════════════════════════
 
-const CAT_ICONS = {
-  'Handleidingen':'📋','HVAC':'🌡️','Elektriciteit':'⚡',
-  'Zonne-energie':'☀️','Waterbehandeling':'💧','Ventilatie':'🌬️','Overige':'🔧'
-};
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=0';
+
+let docs = [], activeFilter = '', currentQrUrl = '', editingId = null, deleteId = null, isUnlocked = false;
+
+const CAT_ICONS = { 'Handleidingen':'📋','HVAC':'🌡️','Elektriciteit':'⚡','Zonne-energie':'☀️','Waterbehandeling':'💧','Ventilatie':'🌬️','Overige':'🔧' };
 const catSlug = c => c.toLowerCase().replace(/[^a-z]/g,'');
 
-// ═══ SHEETS API ═══════════════════════════════════════════════════════
-
-// Read all rows from Sheet
-async function sheetRead() {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}`;
-  const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
-  const data = await resp.json();
-  const rows = data.values || [];
-  if (rows.length < 2) return []; // only header or empty
-  const [header, ...body] = rows;
-  return body.map(row => ({
-    id:       row[0] || '',
-    name:     row[1] || '',
-    cat:      row[2] || '',
-    model:    row[3] || '',
-    location: row[4] || '',
-    url:      row[5] || '',
-    desc:     row[6] || '',
-    tags:     row[7] ? row[7].split(',').map(t => t.trim()).filter(Boolean) : [],
-    _row:     null // filled below
-  })).map((d, i) => ({ ...d, _row: i + 2 })); // row 1 = header, data starts at row 2
-}
-
-// Append a new row
-async function sheetAppend(doc) {
-  const values = [[
-    doc.id, doc.name, doc.cat, doc.model,
-    doc.location, doc.url, doc.desc,
-    (doc.tags || []).join(', ')
-  ]];
-  await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
-    {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values })
-    }
-  );
-}
-
-// Update an existing row by row number
-async function sheetUpdate(rowNum, doc) {
-  const range = `${SHEET_NAME}!A${rowNum}:H${rowNum}`;
-  const values = [[
-    doc.id, doc.name, doc.cat, doc.model,
-    doc.location, doc.url, doc.desc,
-    (doc.tags || []).join(', ')
-  ]];
-  await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?valueInputOption=RAW`,
-    {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values })
-    }
-  );
-}
-
-// Delete a row by row number (clear it and shift up via batchUpdate)
-async function sheetDelete(rowNum) {
-  await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}:batchUpdate`,
-    {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        requests: [{
-          deleteDimension: {
-            range: {
-              sheetId: 0,
-              dimension: 'ROWS',
-              startIndex: rowNum - 1,
-              endIndex: rowNum
-            }
-          }
-        }]
-      })
-    }
-  );
-}
-
-// Ensure header row exists
-async function ensureHeader() {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:H1`;
-  const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
-  const data = await resp.json();
-  if (!data.values || !data.values[0] || data.values[0][0] !== 'id') {
-    await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:H1?valueInputOption=RAW`,
-      {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ values: [['id','name','cat','model','location','url','desc','tags']] })
-      }
-    );
+// TOEGANGSCODE
+function checkCode() {
+  const v = document.getElementById('accessCodeInput').value.trim();
+  if (v === ACCESS_CODE) {
+    isUnlocked = true;
+    document.getElementById('accessBanner').classList.add('unlocked');
+    document.getElementById('accessBadge').classList.add('unlocked');
+    document.getElementById('accessBadge').textContent = '🔓 Bewerken actief';
+    document.getElementById('accessText').textContent  = 'Je kan documenten toevoegen, bewerken en verwijderen.';
+    document.getElementById('accessActions').style.display = 'none';
+    document.getElementById('fabBtn').classList.remove('locked');
+    showToast('🔓 Toegang verleend!');
+    filterDocs();
+  } else {
+    showToast('❌ Toegangscode onjuist');
+    document.getElementById('accessCodeInput').value = '';
   }
 }
 
-// Load all docs from Sheet into memory
+// LADEN UIT SHEET (CSV — geen login nodig)
 async function loadDocs() {
-  document.getElementById('countBadge').textContent = '⏳ Laden…';
+  document.getElementById('loadingState').style.display = '';
+  document.getElementById('docGrid').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('countBadge').textContent = 'laden…';
   try {
-    await ensureHeader();
-    docs = await sheetRead();
+    const resp = await fetch(CSV_URL + '&t=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const csv = await resp.text();
+    const parsed = parseCSV(csv);
+    // Voeg lokaal opgeslagen documenten toe als er geen Script URL is
+    if (!SCRIPT_URL) {
+      const local = JSON.parse(localStorage.getItem('eco_local') || '[]');
+      docs = [...parsed, ...local.filter(l => !parsed.find(p => p.id === l.id))];
+    } else {
+      docs = parsed;
+    }
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('docGrid').style.display = '';
     filterDocs();
-    showToast(`✅ ${docs.length} documenten geladen uit Google Sheet`);
   } catch(e) {
     console.error(e);
-    showToast('❌ Kon documenten niet laden uit Sheet.');
-    document.getElementById('countBadge').textContent = 'Fout bij laden';
+    // Probeer lokale data te tonen als fallback
+    const local = JSON.parse(localStorage.getItem('eco_local') || '[]');
+    if (local.length) {
+      docs = local;
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('docGrid').style.display = '';
+      filterDocs();
+      showToast('⚠️ Sheet niet bereikbaar — lokale data getoond.');
+    } else {
+      document.getElementById('loadingState').innerHTML = `
+        <div style="font-size:2rem;margin-bottom:.75rem">⚠️</div>
+        <p style="margin-bottom:1rem">Kon documenten niet laden.<br>Controleer of de Google Sheet <strong>publiek gedeeld</strong> is.</p>
+        <button class="btn btn-green" onclick="loadDocs()">🔄 Opnieuw proberen</button>`;
+      document.getElementById('countBadge').textContent = 'Fout';
+    }
   }
 }
 
-// ═══ GOOGLE AUTH ══════════════════════════════════════════════════════
-let tokenClient = null;
-
-// Veilige wrapper — werkt altijd, ook als GSI nog laadt
-function handleSignIn() {
-  if (typeof google === 'undefined' || !google.accounts) {
-    showToast('⏳ Google API laadt nog, even wachten…');
-    // Probeer opnieuw na 1 seconde
-    setTimeout(handleSignIn, 1000);
-    return;
-  }
-  if (!tokenClient) {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPES,
-      callback: (resp) => {
-        if (resp.error) {
-          showToast('❌ Aanmelden mislukt: ' + resp.error);
-          console.error('Auth fout:', resp);
-          return;
-        }
-        accessToken = resp.access_token;
-        fetchUserInfo();
-      }
-    });
-  }
-  tokenClient.requestAccessToken({ prompt: 'consent' });
+function parseCSV(csv) {
+  const lines = csv.split('\n').filter(l => l.trim());
+  if (lines.length < 2) return [];
+  return lines.slice(1).map((line, i) => {
+    const c = parseCSVLine(line);
+    return { id: c[0]||String(i+1), name: c[1]||'', cat: c[2]||'Overige', model: c[3]||'', location: c[4]||'', url: c[5]||'', desc: c[6]||'', tags: c[7] ? c[7].split(',').map(t=>t.trim()).filter(Boolean) : [], _row: i+2 };
+  }).filter(d => d.name);
 }
 
-function signOut() {
-  if (accessToken && typeof google !== 'undefined') {
-    google.accounts.oauth2.revoke(accessToken);
+function parseCSVLine(line) {
+  const res = []; let cur = '', q = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i]==='"') { if (q&&line[i+1]==='"'){cur+='"';i++;} else q=!q; }
+    else if (line[i]===','&&!q) { res.push(cur.trim()); cur=''; }
+    else cur+=line[i];
   }
-  accessToken  = null;
-  currentUser  = null;
-  tokenClient  = null;
-  document.getElementById('loginBanner').classList.remove('hidden');
-  document.getElementById('userBar').classList.add('hidden');
-  document.getElementById('fabBtn').classList.add('needs-login');
-  docs = [];
-  renderGrid([]);
-  document.getElementById('emptyState').style.display = '';
-  document.getElementById('emptyState').innerHTML = `
-    <div class="empty-icon">🔐</div>
-    <h3>Meld aan met Google</h3>
-    <p>Klik op "Aanmelden met Google" bovenaan om de documenten te laden.</p>
-  `;
-  showToast('👋 Afgemeld.');
+  res.push(cur.trim()); return res;
 }
 
-function signOut() {
-  if (accessToken) google.accounts.oauth2.revoke(accessToken);
-  accessToken  = null;
-  currentUser  = null;
-  document.getElementById('loginBanner').classList.remove('hidden');
-  document.getElementById('userBar').classList.add('hidden');
-  document.getElementById('fabBtn').classList.remove('needs-login');
-  showToast('👋 Afgemeld.');
-}
-
-function fetchUserInfo() {
-  fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-    headers: { Authorization: `Bearer ${accessToken}` }
-  })
-  .then(r => r.json())
-  .then(u => {
-    currentUser = u;
-    document.getElementById('userName').textContent   = u.name;
-    document.getElementById('userAvatar').src         = u.picture || '';
-    document.getElementById('loginBanner').classList.add('hidden');
-    document.getElementById('userBar').classList.remove('hidden');
-    document.getElementById('fabBtn').classList.remove('needs-login');
-    showToast(`✅ Aangemeld als ${u.name} — documenten laden…`);
-    loadDocs();
-  });
-}
-
-function onFabClick() {
-  if (!accessToken) {
-    showToast('🔐 Meld eerst aan met Google.');
-    handleSignIn();
-    return;
-  }
-  openAddModal();
-}
-
-// ═══ UPLOAD TO DRIVE ══════════════════════════════════════════════════
-let selectedFile = null;
-
-function onFileSelected(e) {
-  selectedFile = e.target.files[0];
-  if (!selectedFile) return;
-  document.getElementById('uploadFilename').textContent = '📄 ' + selectedFile.name;
-  // Auto-fill name if empty
-  if (!document.getElementById('fName').value) {
-    document.getElementById('fName').value = selectedFile.name.replace(/\.[^.]+$/, '');
-  }
-  // Warn if no category selected yet
-  const cat = document.getElementById('fCat').value;
-  if (!cat) {
-    showToast('⚠️ Kies eerst een categorie — het bestand wordt dan in de juiste submap geplaatst.');
-    document.getElementById('uploadStatus').textContent = '⚠️ Kies eerst een categorie hierboven, dan wordt het bestand automatisch geüpload.';
-    document.getElementById('uploadProgress').style.display = 'block';
-    document.getElementById('uploadBar').style.width = '0%';
-    // Listen for category change then auto-upload
-    document.getElementById('fCat').addEventListener('change', function onCatChange() {
-      if (document.getElementById('fCat').value && selectedFile) {
-        uploadToDrive();
-        document.getElementById('fCat').removeEventListener('change', onCatChange);
-      }
-    });
-    return;
-  }
-  uploadToDrive();
-}
-
-// Cache voor submap-IDs zodat we niet telkens opnieuw zoeken
-const subfolderCache = {};
-
-async function getOrCreateSubfolder(categoryName) {
-  // Return cached ID if known
-  if (subfolderCache[categoryName]) return subfolderCache[categoryName];
-
-  // Search for existing subfolder with this name inside FOLDER_ID
-  const searchResp = await fetch(
-    `https://www.googleapis.com/drive/v3/files?q=` +
-    encodeURIComponent(`name='${categoryName}' and mimeType='application/vnd.google-apps.folder' and '${FOLDER_ID}' in parents and trashed=false`) +
-    `&fields=files(id,name)`,
-    { headers: { Authorization: `Bearer ${accessToken}` } }
-  );
-  const searchData = await searchResp.json();
-
-  if (searchData.files && searchData.files.length > 0) {
-    // Folder exists — use it
-    subfolderCache[categoryName] = searchData.files[0].id;
-    return searchData.files[0].id;
-  }
-
-  // Folder doesn't exist — create it
-  const createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      name: categoryName,
-      mimeType: 'application/vnd.google-apps.folder',
-      parents: [FOLDER_ID]
-    })
-  });
-  const folder = await createResp.json();
-  subfolderCache[categoryName] = folder.id;
-  return folder.id;
-}
-
-async function uploadToDrive() {
-  if (!selectedFile || !accessToken) return;
-
-  const progress = document.getElementById('uploadProgress');
-  const bar      = document.getElementById('uploadBar');
-  const status   = document.getElementById('uploadStatus');
-  const result   = document.getElementById('driveResult');
-
-  progress.style.display = 'block';
-  bar.style.width = '10%';
-  bar.style.background = 'var(--green)';
-  status.textContent = '🔍 Submap controleren…';
-  result.classList.remove('show');
-
-  try {
-    // Step 1: get or create submap for selected category
-    const cat = document.getElementById('fCat').value || 'Overige';
-    bar.style.width = '25%';
-    status.textContent = `📁 Submap "${cat}" zoeken of aanmaken…`;
-    const targetFolderId = await getOrCreateSubfolder(cat);
-
-    // Step 2: multipart upload into the subfolder
-    bar.style.width = '45%';
-    status.textContent = '⬆️ Bestand uploaden naar Google Drive…';
-
-    const boundary  = '-------ecofinity_boundary';
-    const fileData  = await selectedFile.arrayBuffer();
-    const metaJson  = JSON.stringify({ name: selectedFile.name, parents: [targetFolderId] });
-    const metaPart  = `Content-Type: application/json\r\n\r\n${metaJson}`;
-    const delimiter = `\r\n--${boundary}\r\n`;
-    const closeDelim = `\r\n--${boundary}--`;
-
-    const body = new Blob([
-      `--${boundary}\r\n`,
-      metaPart,
-      delimiter,
-      `Content-Type: ${selectedFile.type || 'application/octet-stream'}\r\n\r\n`,
-      fileData,
-      closeDelim
-    ]);
-
-    bar.style.width = '70%';
-
-    const uploadResp = await fetch(
-      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': `multipart/related; boundary=${boundary}`
-        },
-        body
-      }
-    );
-
-    bar.style.width = '85%';
-    const fileObj = await uploadResp.json();
-    if (!fileObj.id) throw new Error(JSON.stringify(fileObj));
-
-    // Step 3: make file publicly viewable
-    status.textContent = '🔓 Bestand publiek toegankelijk maken…';
-    await fetch(`https://www.googleapis.com/drive/v3/files/${fileObj.id}/permissions`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ role: 'reader', type: 'anyone' })
-    });
-
-    bar.style.width = '100%';
-    status.textContent = `✅ Opgeslagen in 📁 Ecofinity Documenten / ${cat}`;
-    result.classList.add('show');
-
-    // Auto-fill URL
-    document.getElementById('fUrl').value = `https://drive.google.com/file/d/${fileObj.id}/view`;
-    showToast(`✅ Bestand geüpload naar map "${cat}"!`);
-
-  } catch (err) {
-    bar.style.width = '100%';
-    bar.style.background = '#e74c3c';
-    status.textContent = '❌ Upload mislukt: ' + err.message;
-    showToast('❌ Upload mislukt, controleer je verbinding.');
-    console.error(err);
-  }
-}
-
-// ═══ FILTER / RENDER ══════════════════════════════════════════════════
+// FILTER & RENDER
 function filterDocs() {
   const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  const filtered = docs.filter(d => {
-    const matchCat = !activeFilter || d.cat === activeFilter;
-    const txt = [d.name, d.model, d.location, d.cat, d.desc, ...(d.tags||[])].join(' ').toLowerCase();
-    return matchCat && (!q || txt.includes(q));
+  const list = docs.filter(d => {
+    const mc = !activeFilter || d.cat === activeFilter;
+    const mq = !q || [d.name,d.model,d.location,d.cat,d.desc,...(d.tags||[])].join(' ').toLowerCase().includes(q);
+    return mc && mq;
   });
-  renderGrid(filtered);
+  renderGrid(list);
 }
 
 function setFilter(cat, el) {
   activeFilter = cat;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   filterDocs();
 }
 
 function renderGrid(list) {
-  const grid  = document.getElementById('docGrid');
-  const empty = document.getElementById('emptyState');
-  document.getElementById('countBadge').textContent = `${list.length} resultaat${list.length !== 1 ? 'en' : ''}`;
+  const grid = document.getElementById('docGrid'), empty = document.getElementById('emptyState');
+  document.getElementById('countBadge').textContent = list.length + ' resultaat' + (list.length!==1?'en':'');
   document.getElementById('statTotal').textContent  = docs.length;
   document.getElementById('statCats').textContent   = [...new Set(docs.map(d=>d.cat))].length;
-
-  if (!list.length) { grid.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-
+  if (!list.length) { grid.innerHTML=''; empty.style.display=''; grid.style.display='none'; return; }
+  empty.style.display='none'; grid.style.display='';
+  const editHTML = id => isUnlocked
+    ? `<button class="btn btn-outline" onclick="editDoc('${id}')">✏️</button><button class="btn btn-danger" onclick="askDelete('${id}')">🗑</button>`
+    : '';
   grid.innerHTML = list.map(d => {
-    const slug = catSlug(d.cat);
-    const icon = CAT_ICONS[d.cat] || '📄';
-    const tags = (d.tags||[]).length ? `<div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '';
-    return `
-    <div class="card" id="card-${d.id}">
-      <div class="card-accent cat-${slug}"></div>
-      <div class="card-top">
-        <div class="card-icon cat-${slug}">${icon}</div>
-        <div class="card-meta">
-          <div class="card-cat">${d.cat}</div>
-          <div class="card-name" title="${d.name}">${d.name}</div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-divider"></div>
-        <div class="card-info">
-          ${d.model    ? `<b>Model:</b> ${d.model}<br>` : ''}
-          ${d.location ? `<b>Locatie:</b> ${d.location}<br>` : ''}
-          ${d.desc     ? d.desc : ''}
-        </div>
-        ${tags}
-        <div class="card-actions">
-          <button class="btn btn-green"   onclick="openDoc(${d.id})">📄 Open</button>
-          <button class="btn btn-outline" onclick="openQR(${d.id})">📱 QR</button>
-          <button class="btn btn-outline" onclick="editDoc(${d.id})">✏️</button>
-          <button class="btn btn-danger"  onclick="deleteDoc(${d.id})">🗑</button>
-        </div>
-      </div>
-    </div>`;
+    const sl = catSlug(d.cat), ic = CAT_ICONS[d.cat]||'📄';
+    const tg = (d.tags||[]).length ? `<div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '';
+    return `<div class="card"><div class="card-accent cat-${sl}"></div>
+      <div class="card-top"><div class="card-icon cat-${sl}">${ic}</div>
+      <div class="card-meta"><div class="card-cat">${d.cat}</div><div class="card-name" title="${d.name}">${d.name}</div></div></div>
+      <div class="card-body"><div class="card-divider"></div>
+      <div class="card-info">${d.model?`<b>Model:</b> ${d.model}<br>`:''} ${d.location?`<b>Locatie:</b> ${d.location}<br>`:''} ${d.desc||''}</div>
+      ${tg}<div class="card-actions">
+        <button class="btn btn-green" onclick="openDoc('${d.id}')">📄 Open</button>
+        <button class="btn btn-outline" onclick="openQR('${d.id}')">📱 QR</button>
+        ${editHTML(d.id)}
+      </div></div></div>`;
   }).join('');
 }
 
-// ═══ OPEN DOC ════════════════════════════════════════════════════════
+// OPEN DOC
 function openDoc(id) {
   const d = docs.find(x=>x.id===id);
-  if (!d?.url) return showToast('⚠️ Geen documentlink beschikbaar.');
-  window.open(d.url, '_blank');
+  if (!d?.url) return showToast('⚠️ Geen link beschikbaar.');
+  window.open(d.url,'_blank');
 }
 
-// ═══ QR ══════════════════════════════════════════════════════════════
+// QR
 function openQR(id) {
-  const d = docs.find(x=>x.id===id);
-  if (!d) return;
+  const d = docs.find(x=>x.id===id); if (!d) return;
   currentQrUrl = d.url;
   document.getElementById('qrDocName').textContent = d.name;
-  document.getElementById('qrUrl').textContent     = d.url;
-  const c = document.getElementById('qr-container');
-  c.innerHTML = '';
-  new QRCode(c, { text: d.url, width: 210, height: 210, colorDark: '#2e5c0a', colorLight: '#eef7e4', correctLevel: QRCode.CorrectLevel.H });
+  document.getElementById('qrUrl').textContent = d.url;
+  document.getElementById('qr-container').innerHTML = '';
+  new QRCode(document.getElementById('qr-container'), { text: d.url, width: 210, height: 210, colorDark: '#2e5c0a', colorLight: '#eef7e4', correctLevel: QRCode.CorrectLevel.H });
   document.getElementById('qrOverlay').classList.add('open');
 }
 function downloadQR() {
-  const canvas = document.querySelector('#qr-container canvas');
-  if (!canvas) return;
-  const name = document.getElementById('qrDocName').textContent.replace(/\s+/g,'-').toLowerCase().substring(0,40);
+  const c = document.querySelector('#qr-container canvas'); if (!c) return;
   const a = document.createElement('a');
-  a.download = `qr-ecofinity-${name}.png`;
-  a.href = canvas.toDataURL('image/png');
-  a.click();
-  showToast('✅ QR-code gedownload!');
+  a.download = 'qr-' + document.getElementById('qrDocName').textContent.replace(/\s+/g,'-').toLowerCase().substring(0,40) + '.png';
+  a.href = c.toDataURL('image/png'); a.click();
+  showToast('✅ QR gedownload!');
 }
 function copyUrl() {
-  navigator.clipboard.writeText(currentQrUrl)
-    .then(()=>showToast('✅ Link gekopieerd!'))
-    .catch(()=>{ prompt('Kopieer deze link:', currentQrUrl); });
+  navigator.clipboard.writeText(currentQrUrl).then(()=>showToast('✅ Link gekopieerd!')).catch(()=>prompt('Link:',currentQrUrl));
 }
 
-// ═══ ADD / EDIT ═══════════════════════════════════════════════════════
+// ADD/EDIT
+function onFabClick() {
+  if (!isUnlocked) { showToast('🔒 Voer eerst de toegangscode in.'); return; }
+  openAddModal();
+}
 function openAddModal() {
   editingId = null;
-  selectedFile = null;
   document.getElementById('modalTitle').textContent = '➕ Document toevoegen';
-  ['fName','fModel','fLocation','fUrl','fDesc','fTags'].forEach(id => document.getElementById(id).value = '');
+  ['fName','fModel','fLocation','fUrl','fDesc','fTags'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('fCat').value = '';
-  document.getElementById('uploadFilename').textContent = '';
-  document.getElementById('uploadProgress').style.display = 'none';
-  document.getElementById('uploadStatus').textContent = '';
-  document.getElementById('uploadBar').style.width = '0';
-  document.getElementById('uploadBar').style.background = 'var(--green)';
-  document.getElementById('driveResult').classList.remove('show');
-  document.getElementById('fileInput').value = '';
   document.getElementById('addOverlay').classList.add('open');
 }
-
 function editDoc(id) {
-  const d = docs.find(x=>x.id===id);
-  if (!d) return;
+  const d = docs.find(x=>x.id===id); if (!d) return;
   editingId = id;
-  selectedFile = null;
-  document.getElementById('modalTitle').textContent  = '✏️ Document bewerken';
-  document.getElementById('fName').value     = d.name;
-  document.getElementById('fCat').value      = d.cat;
-  document.getElementById('fModel').value    = d.model    || '';
-  document.getElementById('fLocation').value = d.location || '';
-  document.getElementById('fUrl').value      = d.url;
-  document.getElementById('fDesc').value     = d.desc     || '';
-  document.getElementById('fTags').value     = (d.tags||[]).join(', ');
-  document.getElementById('uploadProgress').style.display = 'none';
-  document.getElementById('uploadStatus').textContent = '';
-  document.getElementById('driveResult').classList.remove('show');
-  document.getElementById('uploadFilename').textContent = '';
-  document.getElementById('fileInput').value = '';
+  document.getElementById('modalTitle').textContent = '✏️ Document bewerken';
+  document.getElementById('fName').value = d.name; document.getElementById('fCat').value = d.cat;
+  document.getElementById('fModel').value = d.model||''; document.getElementById('fLocation').value = d.location||'';
+  document.getElementById('fUrl').value = d.url; document.getElementById('fDesc').value = d.desc||'';
+  document.getElementById('fTags').value = (d.tags||[]).join(', ');
   document.getElementById('addOverlay').classList.add('open');
 }
 
@@ -1059,106 +518,69 @@ async function saveDoc() {
   const name = document.getElementById('fName').value.trim();
   const cat  = document.getElementById('fCat').value;
   const url  = document.getElementById('fUrl').value.trim();
-  if (!name || !cat || !url) { showToast('⚠️ Vul naam, categorie en link in.'); return; }
-
+  if (!name||!cat||!url) { showToast('⚠️ Vul naam, categorie en link in.'); return; }
   const data = {
-    name, cat,
-    model:    document.getElementById('fModel').value.trim(),
+    id: editingId||Date.now().toString(), name, cat,
+    model: document.getElementById('fModel').value.trim(),
     location: document.getElementById('fLocation').value.trim(),
-    url,
-    desc:     document.getElementById('fDesc').value.trim(),
-    tags:     document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    url, desc: document.getElementById('fDesc').value.trim(),
+    tags: document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    action: editingId?'update':'append',
+    row: editingId ? docs.find(x=>x.id===editingId)?._row : null
   };
 
-  // Disable save button during operation
-  const saveBtn = document.querySelector('#addOverlay .btn-green');
-  saveBtn.textContent = '⏳ Opslaan…';
-  saveBtn.disabled = true;
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '⏳ Opslaan…'; btn.disabled = true;
 
-  try {
-    if (editingId) {
-      const existing = docs.find(x => x.id === editingId);
-      data.id = editingId;
-      await sheetUpdate(existing._row, data);
-      showToast('✅ Document bijgewerkt in Google Sheet!');
-    } else {
-      data.id = Date.now().toString();
-      await sheetAppend(data);
-      showToast('✅ Document toegevoegd aan Google Sheet!');
-    }
-    closeOverlay('addOverlay');
-    await loadDocs(); // reload from sheet
-  } catch(e) {
-    showToast('❌ Opslaan mislukt: ' + e.message);
-    console.error(e);
-  } finally {
-    saveBtn.textContent = '💾 Opslaan';
-    saveBtn.disabled = false;
+  if (SCRIPT_URL) {
+    try {
+      await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+      showToast('✅ Opgeslagen in Google Sheet!');
+      closeOverlay('addOverlay');
+      setTimeout(loadDocs, 2000);
+    } catch(e) { localSave(data); }
+  } else {
+    localSave(data);
   }
+  btn.textContent = '💾 Opslaan in Sheet'; btn.disabled = false;
 }
 
-async function deleteDoc(id) {
-  if (!confirm('Document verwijderen uit de lijst én de Sheet?')) return;
-  const d = docs.find(x => x.id === id);
-  if (!d) return;
-  try {
-    await sheetDelete(d._row);
-    showToast('🗑 Document verwijderd uit Google Sheet.');
-    await loadDocs();
-  } catch(e) {
-    showToast('❌ Verwijderen mislukt: ' + e.message);
-    console.error(e);
+function localSave(data) {
+  const local = JSON.parse(localStorage.getItem('eco_local')||'[]');
+  if (data.action==='update') { const i=local.findIndex(x=>x.id===data.id); if(i>=0) local[i]={...local[i],...data}; else local.push(data); }
+  else local.push(data);
+  localStorage.setItem('eco_local', JSON.stringify(local));
+  if (data.action==='update') { const i=docs.findIndex(x=>x.id===data.id); if(i>=0) docs[i]={...docs[i],...data}; }
+  else docs.push(data);
+  filterDocs();
+  showToast('✅ Opgeslagen! (voeg Apps Script URL toe voor sync met Sheet)');
+  closeOverlay('addOverlay');
+}
+
+// DELETE
+function askDelete(id) {
+  deleteId = id;
+  document.getElementById('deleteDocName').textContent = docs.find(x=>x.id===id)?.name||'dit document';
+  document.getElementById('deleteOverlay').classList.add('open');
+}
+async function confirmDelete() {
+  closeOverlay('deleteOverlay');
+  if (!deleteId) return;
+  if (SCRIPT_URL) {
+    const d = docs.find(x=>x.id===deleteId);
+    try { await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'delete',row:d._row}) }); setTimeout(loadDocs,2000); }
+    catch(e) {}
   }
+  // Altijd ook lokaal verwijderen
+  docs = docs.filter(x=>x.id!==deleteId);
+  const local = JSON.parse(localStorage.getItem('eco_local')||'[]').filter(x=>x.id!==deleteId);
+  localStorage.setItem('eco_local', JSON.stringify(local));
+  filterDocs();
+  showToast('🗑 Document verwijderd.');
+  deleteId = null;
 }
 
-// ═══ OVERLAY ══════════════════════════════════════════════════════════
-function closeOverlay(id, e) {
-  if (!e || e.target === document.getElementById(id))
-    document.getElementById(id).classList.remove('open');
-}
-
-// ═══ TOAST ════════════════════════════════════════════════════════════
+// HELPERS
+function closeOverlay(id,e) { if (!e||e.target===document.getElementById(id)) document.getElementById(id).classList.remove('open'); }
 let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
-}
-
-// ═══ DRAG & DROP ══════════════════════════════════════════════════════
-const zone = document.getElementById('uploadZone');
-if (zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
-  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
-  zone.addEventListener('drop', e => {
-    e.preventDefault();
-    zone.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      selectedFile = file;
-      document.getElementById('uploadFilename').textContent = '📄 ' + file.name;
-      if (!document.getElementById('fName').value) document.getElementById('fName').value = file.name.replace(/\.[^.]+$/,'');
-      uploadToDrive();
-    }
-  });
-}
-
-// ═══ INIT ═════════════════════════════════════════════════════════════
-// Data wordt geladen na Google aanmelding
-renderGrid([]);
-document.getElementById('statTotal').textContent  = '—';
-document.getElementById('statCats').textContent   = '—';
-document.getElementById('countBadge').textContent = 'Meld aan om documenten te laden';
-document.getElementById('emptyState').style.display = '';
-document.getElementById('emptyState').innerHTML = `
-  <div class="empty-icon">🔐</div>
-  <h3>Meld aan met Google</h3>
-  <p>Klik op "Aanmelden met Google" bovenaan om de documenten te laden.</p>
-`;
-</script>
-<!-- Google GSI script — onderaan geladen zodat alle functies al beschikbaar zijn -->
-<script src="https://accounts.google.com/gsi/client" async></script>
-</body>
-</html>
+function show
