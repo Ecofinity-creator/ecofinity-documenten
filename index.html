@@ -6,9 +6,8 @@
 <title>Ecofinity – Documenten</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<!-- Google API -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js" async defer></script>
+<!-- Google API — geen async/defer zodat ze zeker laden -->
+<script src="https://accounts.google.com/gsi/client"></script>
 <style>
 :root {
   --green:        #72c02c;
@@ -549,7 +548,7 @@ footer a { color: var(--green-dark); text-decoration: none; font-weight: 700; }
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══ CONFIG ══════════════════════════════════════════════════════════
-const CLIENT_ID   = '1041102043877-7h7c7jvubg66jpi9igk3gq9bj6i3qi8d.apps.googleusercontent.com';
+const CLIENT_ID   = '376408986893-b6uvm3oa5q2jst4psl75jt1qhcr0d8oo.apps.googleusercontent.com';
 const FOLDER_ID   = '1WyiTmueVXAqYHs8aiD4avdKpYUDhp8Nd';
 const SHEET_ID    = '15AwVlEBf_K2d9S8lSdHO1hnf_nHtsly2LDArv1oqo2s';
 const SHEET_NAME  = 'Sheet1';
@@ -684,27 +683,49 @@ async function loadDocs() {
 
 // ═══ GOOGLE AUTH ══════════════════════════════════════════════════════
 let tokenClient;
-window.addEventListener('load', () => {
-  // Wait for GSI to load
-  const interval = setInterval(() => {
-    if (window.google && window.google.accounts) {
-      clearInterval(interval);
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: (resp) => {
-          if (resp.error) { showToast('❌ Aanmelden mislukt: ' + resp.error); return; }
-          accessToken = resp.access_token;
-          fetchUserInfo();
-        }
-      });
+
+function initGoogleAuth() {
+  if (!window.google || !window.google.accounts) {
+    console.error('Google GSI niet geladen');
+    document.getElementById('loginBanner').innerHTML = `
+      <span>⚠️ Google API kon niet laden. Ververs de pagina en probeer opnieuw.</span>
+      <button class="btn-google" onclick="location.reload()">🔄 Ververs pagina</button>
+    `;
+    return;
+  }
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: (resp) => {
+      if (resp.error) {
+        showToast('❌ Aanmelden mislukt: ' + resp.error);
+        console.error('Auth error:', resp);
+        return;
+      }
+      accessToken = resp.access_token;
+      fetchUserInfo();
     }
-  }, 200);
-});
+  });
+  console.log('✅ Google Auth klaar');
+}
+
+// Init zodra pagina geladen is
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initGoogleAuth);
+} else {
+  initGoogleAuth();
+}
 
 function signIn() {
-  if (!tokenClient) { showToast('⏳ Google API nog aan het laden, probeer opnieuw...'); return; }
-  tokenClient.requestAccessToken();
+  if (!tokenClient) {
+    // Probeer opnieuw te initialiseren
+    initGoogleAuth();
+    if (!tokenClient) {
+      showToast('⚠️ Google API niet geladen. Ververs de pagina.');
+      return;
+    }
+  }
+  tokenClient.requestAccessToken({ prompt: 'consent' });
 }
 
 function signOut() {
